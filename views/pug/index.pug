@@ -1,0 +1,140 @@
+doctype html
+html
+	head
+		link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+		link(type='text/css', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css', media='screen,projection')
+		meta(name='viewport', content='width=device-width, initial-scale=1.0')
+		link(rel='stylesheet', href='/css/index.css')
+	
+	body
+		ul#slide-out.side-nav
+			if user
+				li
+					.user-view(style="margin-bottom:0px")
+						.background
+							img(src='http://photovil.hani.co.kr/files/openphoto/thumbnails/100647/035/192/preview_192036.jpg')
+						a(href='#!user')
+							img.circle(src= pP)
+						a(href='#!name')
+							span.white-text.name #{user.displayName}
+						a(href='#!email')
+							span.white-text.email #{user.email}
+				li
+					.row(style="margin-bottom:0px")
+						.col.s12(style="text-align:center")
+							a.waves-effect.waves-teal.btn-flat(href='/auth/logout') Logout
+			else
+				li
+					form.form-horizontal(action='/auth/login' method="post")
+						.form-group(style="margin-left:32px; margin-right:32px;")
+							.input-field
+								input#email.validate(name='email', type='text')
+								label(for='email') E-mail                  
+						.form-group(style="margin-left:32px; margin-right:32px;")
+							.input-field
+								input#pwd.validate(name='password', type='password')
+								label(for='pwd') Password           
+						.form-group(style="margin-left:32px; margin-right:32px;")
+							button.waves-effect.waves-teal.btn-flat(style='width:100%; border-style:solid; border-width:1px; border-color:#e3e479; background-color:#feffa3;') Login
+
+				li(style='padding-left:32px; margin-top:30px;')
+					|SNS login
+
+				li
+					a(href='/auth/google', style='height:40px; margin-bottom:10px')
+						img(src='../../images/button/google.jpg', style='width:100%;')
+				li
+					a(href='/auth/facebook', style='height:40px; margin-bottom:10px')
+						img(src='../../images/button/facebook.jpg', style='width:100%;')
+				li
+					a(href='/auth/github', style='height:40px; margin-bottom:10px')
+						img(src='../../images/button/github.jpg', style='width:100%;')
+
+				li
+					.divider(style='margin-top:20px')
+
+				li
+					.row(style='text-align:center; margin:0px;')
+						.col.s6
+							a(href='/auth/register') Register
+						.col.s6
+							a(href='/auth/register') Find Password		
+	
+		nav.header.nav-top
+			.nav-wrapper
+				a.brand-logo(href='/index', style='padding-left:20px; padding-right:20px')
+					i.material-icons camera
+					if user
+						| #{user.displayName}
+				ul#nav-mobile.right.hide-on-med-and-down
+					li
+						a(href='/index') About Me
+					li
+						a(href='/board/post/1') Board
+					li
+						a(href='#') Portfolio
+					li
+						a(href='#') My Page
+					li#profile
+						button.button-collapse(href='#', data-activates='slide-out', style="height:64px;background-color:transparent;border:0;margin:0;padding:0;")
+							i.material-icons(style="width:64px;") person
+
+		block content     
+
+		script(type='text/javascript', src='https://code.jquery.com/jquery-3.2.1.min.js')
+		script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
+		
+		script.
+			$(document).ready(function() {
+				$('.button-collapse').sideNav({
+					menuWidth: 300, 
+					edge: 'right', 
+					closeOnClick: true, 
+					draggable: true, 
+					onOpen: function(el) { /* Do Stuff*/ }, 
+					onClose: function(el) { /* Do Stuff*/ },    
+				});
+
+				//스크롤시 header 위치
+				var didScroll; 
+				var lastScrollTop = 0; 
+				var delta = 5; 
+				var navbarHeight = $('.header').outerHeight();
+				$(window).scroll(function(event) {
+					didScroll = true; 
+				});
+				
+				setInterval(function() {
+					if (didScroll) { 
+						hasScrolled(); 
+						didScroll = false; 
+					} 
+				}, 250);
+
+				function hasScrolled() { 
+					var st = $(this).scrollTop(); 
+					if (st == 0) {
+						$('.header').removeClass('nav-down').addClass('nav-top');
+					} else {
+						$('.header').removeClass('nav-top');
+					}
+					// Make sure they scroll more than delta 
+					if(Math.abs(lastScrollTop - st) <= delta) return; 
+					// If they scrolled down and are past the navbar, add class .nav-up. 
+					// This is necessary so you never see what is "behind" the navbar. 
+					if (st > lastScrollTop && st > navbarHeight){ 
+						// Scroll Down 
+						$('.header').removeClass('nav-down').addClass('nav-up').fadeOut();
+					} else { 
+						// Scroll Up 
+						if(st + $(window).height() < $(document).height()) { 
+							$('.header').removeClass('nav-up').addClass('nav-down').fadeIn(); 
+						} 
+					} 
+					lastScrollTop = st;
+				}
+			});
+      
+      
+
+      

@@ -1,0 +1,22 @@
+extends ./index
+block content 
+	div.con
+		form(action='/board/write' method="post")
+			.form-group
+				label(for='text') Title:
+				.col-sm-13
+					input#title.form-control(type='text',  name='title')
+			.form-group
+				label(for='content') Content:
+				textarea(style='resize:none; height:300px', name='content')
+			.form-group
+				div.click
+					.btn-group(class='click')
+						input.btn.btn-primary.red.accent-2(type='submit', value='Submit', style="margin:1px")
+						a.btn.btn-default.red.accent-1(href='/board/post/1', role='button', style="margin:1px") Cancle
+	
+	script(type='text/javascript', src='https://code.jquery.com/jquery-3.2.1.min.js')
+	script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
+	
+	script.
+		$('#textarea1').trigger('autoresize');

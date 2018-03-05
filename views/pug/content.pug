@@ -1,0 +1,23 @@
+extends ./index
+block content
+	.header-background
+	.container(style='margin-top:30px')
+		|tite:
+		ul.collection
+			li.collection-item #{posts.title}
+		|content:
+		ul.collection
+			li.collection-item(style='height:300px;') #{posts.content}
+	
+		if(author === authId)			
+			div(style='text-align:right;')
+				a.btn.btn-info.red.accent-2(href='/board/post/1', role='button', style='margin:1px;') List
+				a.btn.btn-primary.red.accent-2(href='/board/post/1', role='button', style='margin"1px;') Edit
+				a.btn.btn-default.red.accent-2(href='/board/delete/post/' + posts.post_number, role='button', style='margin:1px;') Delete
+		else
+			.btn-group(style='text-align:right')
+				a.btn.btn-info.red.accent-2(href='/board/post/1', role='button') List
+				.btn.btn-primary.red.accent-1(style='cursor:no-drop;') Edit
+				.btn.btn-defalut.red.accent-1(style='cursor:no-drop;') Delete
+	
+	

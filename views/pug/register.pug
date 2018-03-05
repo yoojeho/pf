@@ -1,0 +1,77 @@
+doctype html
+html
+	head 
+		meta(charset='utf-8')
+		link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+		script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+		script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+		style(type='text/css').
+			header {
+				text-align:center;
+				border-bottom:1px solid gray;
+				padding-bottom:50px;
+			}
+			header div {
+				position:absolute;
+				top:0;
+				right:0;
+			}
+			.layer{
+				position:absolute;
+				top:0;
+				right:50px;
+			}
+
+	body
+		header
+			div(class="layer")
+				a(href='/index') Home
+      
+			p
+				h1
+					a(href='/auth/register') REGISTER
+
+		nav
+			.container
+				form#register.form-horizontal(action='/auth/register' method="post" enctype="multipart/form-data")
+					.form-group
+						label.control-label.col-sm-2(for='text') E-mail:
+						.col-sm-10
+							input#email.form-control(type='email', placeholder='Enter email', name='email')
+					.form-group
+						label.control-label.col-sm-2(for='pwd') Password:
+						.col-sm-10
+							input#pwd.form-control(type='password', placeholder='Enter password', name='password')
+					.form-group
+						label.control-label.col-sm-2(for='text') DisplayName
+						.col-sm-10
+							input#dpname.form-control(type='text', placeholder='Enter displayName', name='displayName') 
+					.form-group
+						label.control-label.col-sm-2(for='text') profilePicture
+						.col-sm-10
+							input#profile.form-control(type='file', placeholder='profile', name='profile')      
+					.form-group
+						.col-sm-offset-2.col-sm-10
+							input.btn.btn-default(type='submit' value="Submit")
+        
+	button(id='send') send 
+ 	
+	script.
+		$(document).ready(function() {
+			var idcheck;
+			$("#send").click(function() {
+				var email = $("#email").val();
+				$.post("/auth/send", {
+					email: email
+				},
+				function(data, status) {
+					console.log("idcheck:" + idcheck);
+					if(status != "success") {
+						alert('ajax error');
+					} else {
+						
+					}
+				});
+			});
+		}) 
+    

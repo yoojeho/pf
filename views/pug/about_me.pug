@@ -1,0 +1,110 @@
+extends ./index
+block content 
+	.parallax-container(style='position:inherit;')
+		.parallax
+			img(src='images/background/0.jpg')
+	.section.white
+		.layout(style='margin-bottom:50px;')
+			h2 About me
+			p.grey-text.text-darken-3.lighten-3
+			|Parallax is an effect where the background content or image in this case, is moved at a different speed than the foreground content while scrolling.
+		.layout
+			.article
+				.left_content
+					h3.subject My Information Table
+					ul.myinformation_ul
+						li
+							span.row_title name(이름) : 
+							span.row_content 유제호
+						li
+							span.row_title birthday(생년월일) : 
+							span.row_content 1991/12/14
+						li
+							span.row_title mobile(핸드폰) : 
+							span.row_content  010-5280-1214
+						li
+							span.row_title email(이메일) : 
+							span.row_content yjh6456@gmail.com
+						li
+							span.row_title kakaotalk(카카오톡) : 
+							span.row_content yoojeho
+				.right_content
+					h3.subject Skill & Run Tool List
+					dl.skill_list
+						dt
+							strong HTML / CSS
+						dd
+							span.guage.html(style='width:70%;')
+						dt
+							strong Javascript / jQuery
+						dd
+							span.guage.javascript(style='width:80%;')
+						dt
+							strong Java
+						dd
+							span.guage.java(style='width:50%;')
+						dt
+							strong Database(mariaDB, Firestore)
+						dd
+							span.guage.db(style='width:80%;')
+						dt
+							strong Platform(Firebase, Amazon_EC2)
+						dd
+							span.guage.platform(style='width:60%;')
+						dt 
+							strong Android
+						dd
+							span.guage.android(style='width:50%;')
+
+	.parallax-container
+		.parallax
+			img(src='images/background/5.jpg')
+	.section.white
+		.layout
+			h2 Contact
+
+			.row
+				form.col.s12(action='/auth/contact_submit' method="post" enctype="multipart/form-data")
+					.row
+						.input-field
+							i.material-icons.prefix email
+							input#icon_prefix.validate(type='email')
+							label Email Address
+						.input-field
+							i.material-icons.prefix title
+							input#icon_telephone.validate(type='text')
+							label title
+						.input-field
+							i.material-icons.prefix mode_edit
+							textarea#textarea1.materialize-textarea(style='max-height:300px', name='content')
+							label message
+					button.btn.waves-effect.waves-light(type='submit', name='action', style='background-color:#212020;')
+						| Submit
+						i.material-icons.right send
+
+	.fixed-action-btn
+		a.btn-floating.btn-large.amber.accent-3
+			i.large.material-icons arrow_upward
+	script(type='text/javascript', src='https://code.jquery.com/jquery-3.2.1.min.js')
+	script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
+   
+	script.
+		$(document).ready(function(){
+			$('.parallax').parallax();
+
+			//맨위로 버튼
+			$('.fixed-action-btn').click( function() {
+				$( 'html, body' ).animate( { scrollTop : 0 }, 400 );
+				return false;
+			});
+
+			//contact message 줄수 제한
+			$('#textarea1').keydown(function(){
+				var rows = $('#textarea1').val().split('\n').length;
+				var maxRows = 11;
+				if( rows > maxRows){
+					modifiedText = $('#textarea1').val().split("\n").slice(0, maxRows);
+					$('#textarea1').val(modifiedText.join("\n"));
+				}
+			});
+		});
