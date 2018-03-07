@@ -1,0 +1,23 @@
+.type09 {
+	max-width: 980px;
+	margin: 0 auto;
+	height: 700px;
+	border-collapse: collapse;
+	line-height: 3;
+}
+
+.type09 thead th {
+	text-align: center;
+	border-top: 1px solid black;
+	border-bottom: 1px solid #ccc;
+	background: #f3f6f7;
+}
+
+.type09 td {
+	border-bottom: 1px solid #ccc;
+	text-align: center;
+}
+
+.page {
+	text-align: center;
+}

@@ -5,7 +5,9 @@ html
 		link(type='text/css', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css', media='screen,projection')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0')
 		link(rel='stylesheet', href='/css/index.css')
-	
+		link(rel='stylesheet', href='/css/about_me.css')
+		link(rel='stylesheet', href='/css/post_write.css')
+		link(rel='stylesheet', herf='/css/board.css')
 	body
 		ul#slide-out.side-nav
 			if user
@@ -35,21 +37,21 @@ html
 								input#pwd.validate(name='password', type='password')
 								label(for='pwd') Password           
 						.form-group(style="margin-left:32px; margin-right:32px;")
-							button.waves-effect.waves-teal.btn-flat(style='width:100%; border-style:solid; border-width:1px; border-color:#e3e479; background-color:#feffa3;') Login
+							button#login_btn.waves-effect.waves-teal.btn-flat Login
 
 				li(style='padding-left:32px; margin-top:30px;')
 					|SNS login
 
 				li
-					a(href='/auth/google', style='height:40px; margin-bottom:10px')
-						img(src='../../images/button/google.jpg', style='width:100%;')
+					a.sns_btn(href='/auth/google', style='background-color:#dc4a38; color:white; height:40px; padding:0px; line-height:40px;') Google+
+						img.sns_img(src='../../images/button/google.png')
 				li
-					a(href='/auth/facebook', style='height:40px; margin-bottom:10px')
-						img(src='../../images/button/facebook.jpg', style='width:100%;')
+					a.sns_btn(href='/auth/facebook', style='background-color:#2557d3; color:white; height:40px; padding:0px; line-height:40px;') Facebook
+						img.sns_img(src='../../images/button/facebook.png', style='background-color:white;')
 				li
-					a(href='/auth/github', style='height:40px; margin-bottom:10px')
-						img(src='../../images/button/github.jpg', style='width:100%;')
-
+					a.sns_btn(href='/auth/github', style='background-color:#3d3c3c; color:white; height:40px; padding:0px; line-height:40px;') Github
+						img.sns_img(src='../../images/button/github.png', style='background-color:black;')
+			
 				li
 					.divider(style='margin-top:20px')
 

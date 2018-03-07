@@ -18,7 +18,7 @@ module.exports = function () {
 			if (err) {
 				return console.log(err);
 			} else {
-				return console.log('delete temp, nowtime: '+ nowtime + ' time: ' + d.getHours() + ':' +d.getMinutes());
+				return console.log('delete temp, nowtime: ' + nowtime + ' time: ' + d.getHours() + ':' +d.getMinutes() + ' getdate: ' +d.getDate() + ' getday(요일): ' + d.getDay() + ' ' + d.getFullYear() + '년 ' + d.getMonth()+1 + '월 ' + d.getDate() + '일');
 			}
 		})
 	});

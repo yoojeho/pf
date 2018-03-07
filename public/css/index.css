@@ -1,23 +1,6 @@
-.bottom {
-	margin-top: 20px;
-	margin-bottom: 20px;
-	border-top: 1px gray solid;
-	width: 100%;
-	clear: both;
-}
-
 .click {
 	text-align: right;
 	margin-top: 20px;
-}
-
-.section.white {
-	height: 800px;
-}
-
-.parallax-container {
-	height: 500px;
-	z-index: -1;
 }
 
 ul#nav-mobile li#profile:hover {
@@ -44,30 +27,6 @@ ul#nav-mobile li#profile:hover {
 	box-shadow: none;
 }
 
-.type09 {
-	max-width: 980px;
-	margin: 0 auto;
-	height:700px;
-	border-collapse: collapse;
-	line-height: 3;
-}
-
-.type09 thead th {
-	text-align: center;
-	border-top: 1px solid black;
-	border-bottom: 1px solid #ccc;
-	background: #f3f6f7;
-}
-
-.type09 td {
-	border-bottom: 1px solid #ccc;
-	text-align: center;
-}
-
-.page {
-	text-align: center;
-}
-
 .header-background {
 	background-image: url('../../images/background/0.jpg');
 	background-size: cover;
@@ -76,128 +35,27 @@ ul#nav-mobile li#profile:hover {
 	z-index: -1;
 }
 
-.con {
-	width: 80%;
-	height: 600px;
-	float: left;
-	margin-left: 10%;
-	padding: 20px;
+#login_btn {
+	width:100%;
+	border-style:solid;
+	border-width:1px;
+	border-color:#ffd000;
+	background-color:#ffd000;
+	color:#ffffff;
 }
 
-.row_title {
-	float: left;
-	font-weight: bold;
-	font-size: 12px;
-	letter-spacing: 1px;
-	line-height: 70px;
-	vertical-align: middle;
+.sns_btn {
+	margin-bottom:10px;
+	border-radius:3px;
+	margin-left:32px;
+	margin-right:32px;
+	text-align:center;
 }
 
-.row_content {
-	float: left;
-	font-size: 13px;
-	letter-spacing: -1px;
-	line-height: 70px;
-	vertical-align: middle;
-}
-.myinformation_ul li span {
-	display: inline-block;
-}
-.myinformation_ul li {
-	text-align: left;
-	height: 70px;
-}
-.myinformation_ul {
- 	margin: 24px 24px 24px 0;
- 	border-right: 1px solid #000;
-}
-
-.article {
-	margin: 96px 0;
-}
-
-.subject {
- 	font-family: Nanum Brush Script;
- 	font-size: 26px;
- 	text-align: left;
- 	padding-bottom: 12px;
-}
-
-.left_content {
- 	float: left;
- 	width: 50%;
-}
-
-.right_content {
- 	float: right;
- 	width: 50%;
-}
-
-.right_content .skill_list {
- 	margin: 24px 24px 24px 0;
-}
-
-.right_content .skill_list dt {
- 	text-align: left;
- 	height: 30px;
- 	line-height: 30px;
- 	border-bottom: 1px solid #ececec;
-}
-
-.right_content .skill_list dt strong {
- 	letter-spacing: 1px;
- 	font-size: 12px;
-}
-
-.right_content .skill_list dd {
- 	position: relative;
- 	height: 10px;
- 	margin: 10px 0;
- 	background-color: #ddd;
- 	overflow: hidden;
-}
-
-.right_content .skill_list dd .guage {
- 	position: absolute;
- 	height: 10px;
- 	top: 0;
- 	left: 0;
- 	display: block;
- 	text-indent: -9999px;
- 	z-index: 2;
-}
-
-.right_content .skill_list dd .html {
- 	width: 80%;
- 	background-color: #f1c40f;
-}
-
-.right_content .skill_list dd .javascript {
- 	width: 80%;
- 	background-color: #e74c3c;
-}
-
-.right_content .skill_list dd .java {
- 	width: 60%;
- 	background-color: #1ef377;
-}
-
-.right_content .skill_list dd .db {
- 	width: 60%;
- 	background-color: #6e97e2;
-}
-
-.right_content .skill_list dd .platform {
- 	width: 80%;
- 	background-color: #2e3741;
-}
-
-.right_content .skill_list dd .android {
-	width: 50%;
-	background-color: #9b59b6;
-}
-
-.layout {
-	max-width: 980px;
-	margin: 0 auto;
+.sns_img {
+	width:40px;
+	height:40px;
+	float:left;
+	margin-right:-20px;
+	border-radius:3px;
 }
