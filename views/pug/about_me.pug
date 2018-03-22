@@ -1,4 +1,21 @@
 extends ./index
+block googleMap
+	script(src="http://maps.googleapis.com/maps/api/js")
+	script.
+		function initialize() {
+			var uluru = {lat: 37.6194965, lng: 127.05969579999999};
+			var map = new google.maps.Map(document.getElementById('googleMap'), {
+				zoom: 15,
+				center: uluru
+			});
+			var marker = new google.maps.Marker({
+				position: uluru,
+				map: map
+			});
+		}
+		google.maps.event.addDomListener(window, 'load', initialize);
+	script
+
 block content 
 	.parallax-container(style='position:inherit;')
 		.parallax
@@ -9,28 +26,28 @@ block content
 			p.grey-text.text-darken-3.lighten-3
 			|Parallax is an effect where the background content or image in this case, is moved at a different speed than the foreground content while scrolling.
 		.layout
-			.article
-				.left_content
-					h3.subject My Information Table
-					ul.myinformation_ul
+			.my_info
+				.my_info_left_content
+					h3.my_info_title My Information Table
+					ul.my_info_ul
 						li
-							span.row_title name(이름) : 
-							span.row_content 유제호
+							span.info_title name(이름) : 
+							span.info_content 유제호
 						li
-							span.row_title birthday(생년월일) : 
-							span.row_content 1991/12/14
+							span.info_title birthday(생년월일) : 
+							span.info_content 1991/12/14
 						li
-							span.row_title mobile(핸드폰) : 
-							span.row_content  010-5280-1214
+							span.info_title mobile(핸드폰) : 
+							span.info_content  010-5280-1214
 						li
-							span.row_title email(이메일) : 
-							span.row_content yjh6456@gmail.com
+							span.info_title email(이메일) : 
+							span.info_content yjh6456@gmail.com
 						li
-							span.row_title kakaotalk(카카오톡) : 
-							span.row_content yoojeho
-				.right_content
-					h3.subject Skill & Run Tool List
-					dl.skill_list
+							span.info_title kakaotalk(카카오톡) : 
+							span.info_content yoojeho
+				.my_info_right_content
+					h3.my_info_title Skill & Run Tool List
+					dl.my_skill_list
 						dt
 							strong HTML / CSS
 						dd
@@ -59,7 +76,7 @@ block content
 	.parallax-container
 		.parallax
 			img(src='images/background/5.jpg')
-	.section.white
+	.section.white(style='height:500px;')
 		.layout
 			h2 Contact
 
@@ -78,20 +95,21 @@ block content
 							i.material-icons.prefix mode_edit
 							textarea#textarea1.materialize-textarea(style='max-height:300px', name='content')
 							label message
-					button.btn.waves-effect.waves-light(type='submit', name='action', style='background-color:#212020;')
+					button.btn.waves-effect.waves-light(type='submit', name='action', style='background-color:#212020; margin-bottom:30px;')
 						| Submit
 						i.material-icons.right send
-
+	div#googleMap
+	
 	.fixed-action-btn
 		a.btn-floating.btn-large.amber.accent-3
 			i.large.material-icons arrow_upward
 	script(type='text/javascript', src='https://code.jquery.com/jquery-3.2.1.min.js')
 	script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
-   
+ 
 	script.
 		$(document).ready(function(){
 			$('.parallax').parallax();
-
+			
 			//맨위로 버튼
 			$('.fixed-action-btn').click( function() {
 				$( 'html, body' ).animate( { scrollTop : 0 }, 400 );

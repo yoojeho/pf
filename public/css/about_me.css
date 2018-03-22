@@ -1,4 +1,4 @@
-.row_title {
+.info_title {
 	float: left;
 	font-weight: bold;
 	font-size: 12px;
@@ -7,7 +7,7 @@
 	vertical-align: middle;
 }
 
-.row_content {
+.info_content {
 	float: left;
 	font-size: 13px;
 	letter-spacing: -1px;
@@ -15,16 +15,16 @@
 	vertical-align: middle;
 }
 
-.myinformation_ul li span {
+.my_info_ul li span {
 	display: inline-block;
 }
 
-.myinformation_ul li {
+.my_info_ul li {
 	text-align: left;
 	height: 70px;
 }
 
-.myinformation_ul {
+.my_info_ul {
 	margin: 24px 24px 24px 0;
 	border-right: 1px solid #000;
 }
@@ -33,48 +33,48 @@
 	margin: 96px 0;
 }
 
-.subject {
+.my_info_title {
 	font-family: Nanum Brush Script;
 	font-size: 26px;
 	text-align: left;
 	padding-bottom: 12px;
 }
 
-.left_content {
+.my_info_left_content {
 	float: left;
 	width: 50%;
 }
 
-.right_content {
+.my_info_right_content {
 	float: right;
 	width: 50%;
 }
 
-.right_content .skill_list {
+.my_info_right_content .my_skill_list {
 	margin: 24px 24px 24px 0;
 }
 
-.right_content .skill_list dt {
+.my_info_right_content .my_skill_list dt {
 	text-align: left;
 	height: 30px;
 	line-height: 30px;
-	border-bottom: 1px solid #ececec;
+	border-bottom: 1px solid #ebe9e9;
 }
 
-.right_content .skill_list dt strong {
+.my_info_right_content .my_skill_list dt strong {
 	letter-spacing: 1px;
 	font-size: 12px;
 }
 
-.right_content .skill_list dd {
+.my_info_right_content .my_skill_list dd {
 	position: relative;
 	height: 10px;
 	margin: 10px 0;
-	background-color: #ddd;
+	background-color: rgb(212, 209, 209);
 	overflow: hidden;
 }
 
-.right_content .skill_list dd .guage {
+.my_info_right_content .my_skill_list dd .guage {
 	position: absolute;
 	height: 10px;
 	top: 0;
@@ -84,46 +84,52 @@
 	z-index: 2;
 }
 
-.right_content .skill_list dd .html {
+.my_info_right_content .my_skill_list dd .html {
 	width: 80%;
-	background-color: #f1c40f;
+	background-color: #f3c50d;
 }
 
-.right_content .skill_list dd .javascript {
+.my_info_right_content .my_skill_list dd .javascript {
 	width: 80%;
-	background-color: #e74c3c;
+	background-color: #e44c3b;
 }
 
-.right_content .skill_list dd .java {
+.my_info_right_content .my_skill_list dd .java {
 	width: 60%;
-	background-color: #1ef377;
+	background-color: #1fee75;
 }
 
-.right_content .skill_list dd .db {
+.my_info_right_content .my_skill_list dd .db {
 	width: 60%;
-	background-color: #6e97e2;
+	background-color: #6b92db;
 }
 
-.right_content .skill_list dd .platform {
+.my_info_right_content .my_skill_list dd .platform {
 	width: 80%;
-	background-color: #2e3741;
+	background-color: #303942;
 }
 
-.right_content .skill_list dd .android {
+.my_info_right_content .my_skill_list dd .android {
 	width: 50%;
-	background-color: #9b59b6;
+	background-color: #9955b4;
 }
 
 .layout {
-	max-width: 980px;
+	max-width: 1100px;
 	margin: 0 auto;
 }
 
 .section.white {
-	height: 800px;
+	height: 720px;
 }
 
 .parallax-container {
 	height: 500px;
 	z-index: -1;
+}
+
+#googleMap {
+	height: 450px;
+	width: 100%;
+	background-color: grey;
 }

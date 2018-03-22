@@ -7,18 +7,17 @@ module.exports = function () {
 	var bodyParser = require('body-parser');
 	var db_config = require('./db_config.json');
 	var schedule = require('node-schedule');
-	var scheduler = schedule.scheduleJob('* 0 * * *', function () {
+	var scheduler = schedule.scheduleJob('0 0 * * *', function () {
 		var nowtime = Date.now();
 		var time = nowtime - 86400000;
 		var d = new Date();
-
 		var sql = 'DELETE FROM temp WHERE time>=?';
 		//매일 0시에 생성된지 하루가 지난 정보 초기화
 		conn.query(sql, [time], function (err, results) {
 			if (err) {
 				return console.log(err);
 			} else {
-				return console.log('delete temp, nowtime: ' + nowtime + ' time: ' + d.getHours() + ':' +d.getMinutes() + ' getdate: ' +d.getDate() + ' getday(요일): ' + d.getDay() + ' ' + d.getFullYear() + '년 ' + d.getMonth()+1 + '월 ' + d.getDate() + '일');
+				return console.log('delete temp, nowtime: ' + nowtime + ' / time: ' + d.getHours() + ':' + d.getMinutes() + '/ getday(요일): ' + d.getDay() + ' / ' + d.getFullYear() + '년 ' + parseInt(d.getMonth()) +1 + '월 ' + d.getDate() + '일');
 			}
 		})
 	});

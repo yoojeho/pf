@@ -43,11 +43,11 @@ module.exports = function (passport) {
 	route.get('/google/callback',
 		passport.authenticate(
 			'google', {
-				failureRedirect: '/'
+				failureRedirect: '/index'
 			}),
 		function (req, res) {
 			req.session.save(function (err) {
-				res.redirect('/');
+				res.redirect('/index');
 			});
 		}
 	);
@@ -57,8 +57,8 @@ module.exports = function (passport) {
 	route.get('/facebook/callback',
 		passport.authenticate(
 			'facebook', {
-				successRedirect: '/',
-				failureRedirect: '/'
+				successRedirect: '/index',
+				failureRedirect: '/index'
 			}
 		)
 	);
@@ -70,11 +70,11 @@ module.exports = function (passport) {
 	route.get('/github/callback',
 		passport.authenticate(
 			'github', {
-				failureRedirect: '/login'
+				failureRedirect: '/index'
 			}),
 		function (req, res) {
 			req.session.save(function (err) {
-				res.redirect('/');
+				res.redirect('/index');
 			});
 		}
 	);

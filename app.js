@@ -10,11 +10,11 @@ app.use('/index', index);
 var board = require('./route/board')();
 app.use('/board', board);
 
-// app.get('/', function (req, res) {
-// 	var user = req.user;
-// 	console.log('appget', JSON.stringify(user), req.user);
-// 	res.render('index', { user: user });
-// });
+app.get('/', function (req, res) {
+	// var user = req.user;
+	// console.log('appget', JSON.stringify(user), req.user);
+	res.redirect('/index');
+});
 
 app.listen(80, function () {
 	console.log('test Connected 80 port!!');

@@ -3,10 +3,6 @@ module.exports = function () {
 	var conn = require('../config/database')();
 
 	route.get('/', function (req, res) {
-		var date = Date.now();
-		var d = new Date();
-		console.log(date);
-		console.log('date(일): ' + d.getDate() + ' day(요일): ' + d.getDay() + ' min: ' + d.getMinutes() + ' hours:' + d.getHours() + ' fulyear: ' + d.getFullYear() + ' month: ' + d.getMonth() + ' time: ' + d.getTime());
 		var user = req.user;
 		if (user) {
 			var authId = user.authId;
