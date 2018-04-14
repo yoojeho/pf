@@ -1,4 +1,5 @@
-{
+{   
+    "extends" : "airbnb",
     "env": {
         "browser": true,
         "commonjs": true,
@@ -6,18 +7,34 @@
         "node": true
     },
     "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
         "sourceType": "module"
     },
     "rules": {
-        "no-const-assign": "warn",
-        "no-this-before-super": "warn",
-        "no-undef": "warn",
-        "no-unreachable": "warn",
-        "no-unused-vars": "warn",
-        "constructor-super": "warn",
-        "valid-typeof": "warn"
+        "linebreak-style": [
+            "error",
+            "windows"
+        ],
+        "indent": [
+            "error", "tab"
+        ],
+        "no-tabs": 0,
+        "no-plusplus": 0,
+        "camelcase": 0,
+        "no-console": 0,
+        "no-shadow": [
+            "error",
+            {
+                "builtinGlobals": false,
+                "hoist": "functions",
+                "allow": ["err", "error", "sql", "results", "result"]
+            }
+        ],
+        
+        "object-shorthand": 0,
+        "prefer-template":0
+    },
+    "globals": {
+        "jQuery": true,
+        "$": true
     }
 }

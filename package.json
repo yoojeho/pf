@@ -21,10 +21,15 @@
     "passport-google-oauth20": "^1.0.0",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.4",
+    "socket.io": "^2.0.4",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "eslint": "^4.16.0"
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.7.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

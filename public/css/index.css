@@ -70,3 +70,21 @@ ul#nav-mobile li#profile:hover {
 	text-align: center;
 }
 
+.chat {
+	width: 10%;
+}
+
+#userList {
+	width:18%;
+	height:200px;
+	resize:none;
+	position:absolute;
+	right:3%;
+	padding:5px;
+}
+
+#chatLog {
+	width:80%;
+	height:200px;
+	resize:none;
+}

@@ -1,39 +1,58 @@
 extends ./index
-block content  
-  .header-background
-  .type09(style='margin-top:30px;')
-    table
-      colgroup
-        col(span='1', style='width: 15%;')
-        col(span='1', style='width: 70%;')
-        col(span='1', style='width: 15%;')
-      thead
-        tr
-          th(scope='cols') No.
-          th(scope='cols') Title
-          th(scope='cols') author
-      tbody
-        -var start, end, row = 5;
-        -var len = posts.length;
-        -var pages = Math.floor((len + row-1) / row);
-        -start = len-(page-1)*row -1;
-        -end = len-(page)*row -1;
-        -end = (end >= -1) ? end : -1;
-        -for(var i = start ; i > end; i--)
-          tr
-            td #{posts[i].post_number}
-            td 
-              a(href='/board/content/'+posts[i].post_number+'/1') #{posts[i].title}
-            td #{posts[i].displayName}
-    div.click
-      a.btn.btn-primary.btn-lg.red.accent-2(href='/board/write',style="margin:0 auto" role='button') Write   
-          
-      
-    div.page
-      ul.pagination
-        -for(var i = 0; i<pages; i++)
-          li
-            a(href='/board/post/' + (i+1))= i+1
+block content
+	.header-background
+	.type09(style='margin-top:30px;')
+		table
+			colgroup
+				col(span='1', style='width: 15%;')
+				col(span='1', style='width: 70%;')
+				col(span='1', style='width: 15%;')
+			thead
+				tr
+					th(scope='cols') No.
+					th(scope='cols') Title
+					th(scope='cols') author
+			tbody
+				-let start, end, row = 5;
+				-let len = posts.length;
+				-let pages = Math.floor((len + row-1) / row);
+				-start = len-(page-1)*row -1;
+				-end = len-(page)*row -1;
+				-end = (end >= -1) ? end : -1;
+				-for(let i = start ; i > end; i--)
+					tr
+						td #{posts[i].post_number}
+						td 
+							a(href='/board/content/'+posts[i].post_number+'/1') #{posts[i].title}
+						td #{posts[i].displayName}
+		div.click
+			a#write_btn.btn.btn-primary.btn-lg.red.accent-2(style="margin:0 auto" role='button') Write   
+					
+			
+		div.page
+			ul.pagination
+				-for(let i = 0; i<pages; i++)
+					li
+						a(href='/board/post/' + (i+1))= i+1
 
-      
-      
+	script(type='text/javascript', src='https://code.jquery.com/jquery-3.2.1.min.js')
+	script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
+
+	script.
+		$(document).ready(function() {
+			$('#write_btn').click(function() {
+				$.post('/board/usercheck', function(data, status) {
+					if (status != "success") {
+						alert('ajax error');
+					} else {
+						if (data == "true") {
+							window.location.replace('/board/write');
+						} else {
+							alert('로그인 해주세요');
+						}
+					}
+				})
+			})
+		})
+		
+			

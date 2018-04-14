@@ -1,59 +1,67 @@
-module.exports = function () {
-	var conn = require('../config/database')();
-	var route = require('express').Router();
+const conn = require('../config/database')();
+const route = require('express').Router();
 
-	//글목록
-	route.get('/post/:post_page', function (req, res) {
-		var user = req.user;
-		var page = req.params.post_page;
-		var sql = 'SELECT * FROM posts';
-		conn.query(sql, function (err, results) {
-			var posts = results;
+module.exports = () => {
+	// 유저체크
+	route.post('/usercheck', (req, res) => {
+		const { user } = req;
+		if (user) {
+			res.send('true');
+		} else {
+			res.send('false');
+		}
+	});
+
+	// 글목록
+	route.get('/post/:post_page', (req, res) => {
+		const { user } = req;
+		const page = req.params.post_page;
+		const sql = 'SELECT * FROM posts';
+		conn.query(sql, (err, results) => {
+			const posts = results;
 			if (user) {
-				var authId = user.authId;
-				var email = user.email;
-				var sql = 'SELECT * FROM users WHERE authId=?';
-				conn.query(sql, [authId], function (err, results) {
-					var profilePicture = results[0].profilePicture;
-					var pP = '../../images/userprofile/' + email + '/profilePicture/' + profilePicture;
-					console.log('pP: ' + pP);
+				const { authId } = user;
+				const { email } = user;
+				const sql = 'SELECT * FROM users WHERE authId=?';
+				conn.query(sql, [authId], (err, results) => {
+					const { profilePicture } = results[0];
+					const pP = '/images/userprofile/' + email + '/profilePicture/' + profilePicture;
 					res.render('board', {
 						user: user,
 						pP: pP,
 						page: page,
-						posts: posts
+						posts: posts,
 					});
-				})
+				});
 			} else {
 				res.render('board', {
 					page: page,
-					posts: posts
+					posts: posts,
 				});
 			}
-		})
+		});
 	});
 
-	//글내용
-	route.get('/content/:post_num/:comment_page', function (req, res) {
-		var post_num = req.params.post_num;
-		var page = req.params.comment_page;
-		var sql = 'SELECT * FROM posts WHERE post_number=?'
-		conn.query(sql, [post_num], function (err, results) {
-			var posts = results[0];
+	// 글내용
+	route.get('/content/:post_num/:comment_page', (req, res) => {
+		const { post_num } = req.params;
+		const page = req.params.comment_page;
+		const sql = 'SELECT * FROM posts WHERE post_number=?';
+		conn.query(sql, [post_num], (err, results) => {
+			const posts = results[0];
 			if (posts) {
-				var author = posts.authId;
-				var user = req.user;
-				var sql = 'SELECT * FROM comments WHERE post_number=?'
-				conn.query(sql, [post_num], function (err, results) {
-					var comments = results[0];
+				const author = posts.authId;
+				const { user } = req;
+				const sql = 'SELECT * FROM comments WHERE post_number=?';
+				conn.query(sql, [post_num], (err, results) => {
+					const comments = results[0];
 					if (user) {
-						var authId = user.authId;
-						var email = user.email;
-						var sql = 'SELECT * FROM users WHERE authId=?';
-						conn.query(sql, [authId], function (err, results) {
-							var profilePicture = results[0].profilePicture;
-							var pP = '../../../images/userprofile/' + email + '/profilePicture/' + profilePicture;
-							console.log('pP: ' + pP);
+						const { authId } = user;
+						const { email } = user;
+						const sql = 'SELECT * FROM users WHERE authId=?';
+						conn.query(sql, [authId], (err, results) => {
+							const { profilePicture } = results[0];
+							const pP = '/images/userprofile/' + email + '/profilePicture/' + profilePicture;
 							res.render('content', {
 								user: user,
 								pP: pP,
@@ -61,76 +69,91 @@ module.exports = function () {
 								posts: posts,
 								comments: comments,
 								author: author,
-								authId: authId
+								authId: authId,
 							});
-						})
+						});
 					} else {
 						res.render('content', {
 							page: page,
 							posts: posts,
 							comments: comments,
 							author: author,
-							authId: authId
 						});
-					}	
-				})
+					}
+				});
 			} else {
 				res.redirect('/board/post/1');
 			}
-		})
+		});
 	});
 
-	//글쓰기
-	route.post('/write', function (req, res) {
-		var title = req.body.title;
-		var content = req.body.content;
-		var dpName = req.user.displayName;
-		var authId = req.user.authId;
+	// 글쓰기
+	route.post('/write', (req, res) => {
+		const { title } = req.body;
+		const { content } = req.body;
+		const { authId } = req.user;
+		const dpName = req.user.displayName;
 
-		var doc = {
+		const doc = {
 			title: title,
 			content: content,
 			displayName: dpName,
-			authId: authId
+			authId: authId,
 		};
-		var sql = 'INSERT INTO posts SET ?';
-		conn.query(sql, doc, function (err, results) {
+		const sql = 'INSERT INTO posts SET ?';
+		conn.query(sql, doc, (err) => {
 			if (err) {
 				console.log(err);
 			} else {
 				res.redirect('/board/post/1');
 			}
-		})
+		});
 	});
 
-	route.get('/write', function (req, res) {
-		var user = req.user;
-		if(user){
-			var authId = user.authId;
-			var email = user.email;
-			var sql = 'SELECT * FROM users WHERE authId=?';
-			conn.query(sql, [authId], function (err, results) {
-				var profilePicture = results[0].profilePicture;
-				var pP = '../../images/userprofile/' + email + '/profilePicture/' + profilePicture;
-				console.log('pP: ' + pP);
+	route.get('/write', (req, res) => {
+		const { user } = req;
+		if (user) {
+			const { authId } = user;
+			const { email } = user;
+			const sql = 'SELECT * FROM users WHERE authId=?';
+			conn.query(sql, [authId], (err, results) => {
+				const { profilePicture } = results[0];
+				const pP = '/images/userprofile/' + email + '/profilePicture/' + profilePicture;
 				res.render('post_write', {
 					user: user,
-					pP: pP
+					pP: pP,
 				});
-			})
+			});
 		} else {
 			res.redirect('/board/post/1');
 		}
 	});
-	
 
-	route.get('/delete/post/:post_num', function (req, res) {
-		res.send('post_delete');
+	// 글삭제
+	route.delete('/delete/post/:post_num', (req, res) => {
+		const post_number = req.params.post_num;
+		const user_authId = req.user.authId;
+		const sql = 'SELECT * FROM posts WHERE post_number=?';
+		conn.query(sql, [post_number], (err, results) => {
+			const post_authId = results[0].authId;
+			if (post_authId === user_authId) {
+				const sql = 'DELETE FROM posts WHERE post_number=? AND authId=?';
+				conn.query(sql, [post_number, user_authId], (err) => {
+					if (err) {
+						console.log(err);
+					} else {
+						res.redirect('/board/post/1');
+					}
+				});
+			} else {
+				res.send('fail');
+			}
+		});
 	});
 
-	route.get('/delete/comment/:post_num/:comment_num', function (req, res) {
+	// route.get('/delete/comment/:post_num/:comment_num', (req, res) => {
 
-	});
+	// });
 
 	return route;
-}
+};

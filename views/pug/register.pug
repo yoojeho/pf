@@ -58,14 +58,12 @@ html
  	
 	script.
 		$(document).ready(function() {
-			var idcheck;
 			$("#send").click(function() {
-				var email = $("#email").val();
+				const email = $("#email").val();
 				$.post("/auth/send", {
 					email: email
 				},
 				function(data, status) {
-					console.log("idcheck:" + idcheck);
 					if(status != "success") {
 						alert('ajax error');
 					} else {

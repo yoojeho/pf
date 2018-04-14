@@ -9,6 +9,7 @@ html
 		link(rel='stylesheet', href='/css/post_write.css')
 		link(rel='stylesheet', href='/css/board.css')
 		block googleMap
+
 	body
 		ul#slide-out.side-nav
 			if user
@@ -26,6 +27,8 @@ html
 					.row(style="margin-bottom:0px")
 						.col.s12(style="text-align:center")
 							a.waves-effect.waves-teal.btn-flat(href='/auth/logout') Logout
+				li
+					.divider(style="margin:0px;")
 			else
 				li
 					form.form-horizontal(action='/auth/login' method="post")
@@ -45,13 +48,13 @@ html
 
 				li
 					a.sns_btn(href='/auth/google', style='background-color:#dc4a38; color:white; height:40px; padding:0px; line-height:40px;') Google+
-						img.sns_img(src='../../images/button/google.png')
+						img.sns_img(src='/images/button/google.png')
 				li
 					a.sns_btn(href='/auth/facebook', style='background-color:#2557d3; color:white; height:40px; padding:0px; line-height:40px;') Facebook
-						img.sns_img(src='../../images/button/facebook.png', style='background-color:white;')
+						img.sns_img(src='/images/button/facebook.png', style='background-color:white;')
 				li
 					a.sns_btn(href='/auth/github', style='background-color:#3d3c3c; color:white; height:40px; padding:0px; line-height:40px;') Github
-						img.sns_img(src='../../images/button/github.png', style='background-color:black;')
+						img.sns_img(src='/images/button/github.png', style='background-color:black;')
 			
 				li
 					.divider(style='margin-top:20px')
@@ -65,33 +68,51 @@ html
 	
 		nav.header.nav-top
 			.nav-wrapper
-				a.brand-logo(href='/index', style='padding-left:20px; padding-right:20px')
+				a.brand-logo(href='/index', style='padding-left:20px; padding-right:20px; left:auto; transform:none;')
 					i.material-icons camera
 					if user
 						| #{user.displayName}
-				ul#nav-mobile.right.hide-on-med-and-down
+				ul#nav-mobile.right
 					li
 						a(href='/index') About Me
 					li
+						a#gochat.modal-trigger(data-target='modal1') Chatting
+					li
 						a(href='/board/post/1') Board
 					li
-						a(href='#') Portfolio
-					li
-						a(href='#') My Page
+						
 					li#profile
 						button.button-collapse(href='#', data-activates='slide-out', style="height:64px;background-color:transparent;border:0;margin:0;padding:0;")
 							i.material-icons(style="width:64px;") person
+	
+		#modal1.modal
+			button#closemodal.modal-close.right(style='background-color:transparent; border:0;')
+				i.material-icons close
+			.modal-content(style='padding-bottom:10px;')
+				div(style='height:200px;')
+					textarea#chatLog(readonly='')
+					textarea#userList(readonly='')
+				form#chat
+					if user
+						input#name.name(type='text', readonly='', value=user.displayName, style='width:10%; border:none; margin:0;') 
+					else 
+						input#name.name(type='text', readonly='', value='', style='width:10%; border:none; margin:0;') 
+					input#message.message(type='text', style='width:80%; border:none; margin:0;')
+					input.chat(type='submit', value='chat')
+	
+		block content
 
-		block content     
 		.bottom
 			.copyright
 				|Copyright 2018. Jeho-Yoo. All rights reserved.
 		
+		script(src='/socket.io/socket.io.js')
 		script(type='text/javascript', src='https://code.jquery.com/jquery-3.2.1.min.js')
 		script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
 		
 		script.
 			$(document).ready(function() {
+				//sideNav 기능
 				$('.button-collapse').sideNav({
 					menuWidth: 300, 
 					edge: 'right', 
@@ -102,10 +123,10 @@ html
 				});
 
 				//스크롤시 header 위치
-				var didScroll; 
-				var lastScrollTop = 0; 
-				var delta = 5; 
-				var navbarHeight = $('.header').outerHeight();
+				let didScroll; 
+				let lastScrollTop = 0; 
+				const delta = 5; 
+				const navbarHeight = $('.header').outerHeight();
 				$(window).scroll(function(event) {
 					didScroll = true; 
 				});
@@ -118,7 +139,7 @@ html
 				}, 250);
 
 				function hasScrolled() { 
-					var st = $(this).scrollTop(); 
+					const st = $(this).scrollTop(); 
 					if (st == 0) {
 						$('.header').removeClass('nav-down').addClass('nav-top');
 					} else {
@@ -138,6 +159,82 @@ html
 						} 
 					} 
 					lastScrollTop = st;
+				}
+
+				//header메뉴 크기 조절
+				$(window).resize(function(){
+					const windowWidth = $(window).width();
+					if(windowWidth < 800) {
+						$('.brand-logo').addClass('hide-on-med-and-down');
+					} else {
+						$('.brand-logo').removeClass('hide-on-med-and-down');
+					}
+					if(windowWidth < 410) {
+						$('#nav-mobile.right li:odd').addClass('hide-on-med-and-down');
+					} else {
+						$('#nav-mobile.right li:odd').removeClass('hide-on-med-and-down');
+					}
+				});
+				
+				$('.modal').modal({
+					dismissible: false
+				});
+
+				//전송 버튼 클릭시
+				$('#chat').on('submit', function(e) {
+					//서버로 메세지 전송 
+					socket.emit('send message', $('#name').val(), $('#message').val());
+					$('#chatLog').append($('#name').val() + ' : ' + $('#message').val() + "\n");	
+					$('#message').val("");
+					$('#message').focus();
+					e.preventDefault();
+				});
+
+				//채팅
+				let socket;
+				$('#gochat').click(function() {
+					$("#chatLog").empty();
+					$("#userList").empty();
+					
+					socket = io();
+					
+					//서버로 정보 전송
+					socket.emit("login", $('#name').val());
+
+					//서버로부터 정보 수신
+					socket.on('login', socketLogin);
+					socket.on('change name', socketChageName);
+					socket.on('logout', socketLogout);
+					socket.on('receive message', socketReceiveMsg);
+				})
+
+				$('#closemodal').click(function() {
+					socket.removeListener('login', socketLogin);
+					socket.removeListener('forceDisconnect');
+					socket.removeListener('logout', socketLogout);
+					socket.removeListener('receive message', socketReceiveMsg);
+					socket.removeListener('change name', socketChageName);
+
+					//강제종료
+					socket.emit('forceDisconnect')
+				})
+
+				function socketLogin(dpName, userList) {
+					$("#chatLog").append("========== \"" + dpName + "\"" + " 님이 로그인하셨습니다. ==========\n");
+					$("#userList").text(userList);
+				}
+
+				function socketLogout(dpName, userList) {
+					$("#chatLog").append("========== \"" + dpName + "\"" + " 님이 로그아웃하셨습니다. ==========\n");
+					$("#userList").text(userList);
+				}
+
+				function socketReceiveMsg(msg) {
+						$('#chatLog').append(msg + "\n");
+				}
+
+				function socketChageName(dpName) {
+					$('#name').val(dpName);
 				}
 			});
       

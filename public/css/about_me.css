@@ -67,7 +67,6 @@
 }
 
 .my_info_right_content .my_skill_list dd {
-	position: relative;
 	height: 10px;
 	margin: 10px 0;
 	background-color: rgb(212, 209, 209);
@@ -75,12 +74,8 @@
 }
 
 .my_info_right_content .my_skill_list dd .guage {
-	position: absolute;
 	height: 10px;
-	top: 0;
-	left: 0;
 	display: block;
-	text-indent: -9999px;
 	z-index: 2;
 }
 
@@ -121,6 +116,8 @@
 
 .section.white {
 	height: 720px;
+	width: 80%;
+	margin-left: 10%;
 }
 
 .parallax-container {
