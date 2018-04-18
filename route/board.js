@@ -83,10 +83,10 @@ module.exports = () => {
 		const page = req.params.comment_page;
 		const sql = 'SELECT * FROM posts WHERE post_number=?';
 		conn.query(sql, [post_num], (err, results) => {
-			const posts = results[0];
-			if (posts) {
-				const content = posts.content.split('');
-				const author = posts.authId;
+			const post = results[0];
+			if (post) {
+				const content = post.content.split('');
+				const author = post.authId;
 				const { user } = req;
 
 				const sql = 'SELECT * FROM comments WHERE post_number=?';
@@ -103,7 +103,7 @@ module.exports = () => {
 								user,
 								pP,
 								page,
-								posts,
+								post,
 								content,
 								comments,
 								author,
@@ -113,7 +113,7 @@ module.exports = () => {
 					} else {
 						res.render('content', {
 							page,
-							posts,
+							post,
 							content,
 							comments,
 							author,
@@ -140,7 +140,7 @@ module.exports = () => {
 			authId,
 			categori,
 		};
-		console.log(categori);
+
 		if (categori === '') return res.send('categori_null');
 		if (title === '') return res.send('title_null');
 		if (!authId) return res.send('user_null');
@@ -173,17 +173,61 @@ module.exports = () => {
 		}
 	});
 
+	// 글수정
+	route.post('/edit/post', (req, res) => {
+		const { title } = req.body;
+		const { post_num } = req.body;
+		const { content } = req.body;
+		const { authId } = req.user;
+		const { categori } = req.body;
+
+		if (categori === '') return res.send('categori_null');
+		if (title === '') return res.send('title_null');
+		if (!authId) return res.send('user_null');
+		const sql = 'UPDATE posts set title=?, content=?, categori=? WHERE authId=? AND post_number=?';
+		return conn.query(sql, [title, content, categori, authId, post_num], (err) => {
+			if (err) {
+				console.log(err);
+				return res.send('err');
+			}
+			return res.send('success');
+		});
+	});
+
+	route.get('/edit/post/:post_num', (req, res) => {
+		if (req.user) {
+			const { post_num } = req.params;
+			const user_authId = req.user.authId;
+			const sql = 'SELECT * FROM posts WHERE post_number=?';
+			conn.query(sql, [post_num], (err, results) => {
+				if (err) {
+					console.log(err);
+				}	else {
+					const post = results[0];
+					const post_authId = post.authId;
+					if (post_authId === user_authId) {
+						res.render('post_edit', {
+							post,
+						});
+					}
+				}
+			});
+		} else {
+			res.redirect('/board/post?page=1');
+		}
+	});
+
 	// 글삭제
 	route.get('/delete/post/:post_num', (req, res) => {
 		if (req.user) {
-			const post_number = req.params.post_num;
+			const { post_num } = req.params;
 			const user_authId = req.user.authId;
 			const sql = 'SELECT * FROM posts WHERE post_number=?';
-			conn.query(sql, [post_number], (err, results) => {
+			conn.query(sql, [post_num], (err, results) => {
 				const post_authId = results[0].authId;
 				if (post_authId === user_authId) {
 					const sql = 'DELETE FROM posts WHERE post_number=? AND authId=?';
-					conn.query(sql, [post_number, user_authId], (err) => {
+					conn.query(sql, [post_num, user_authId], (err) => {
 						if (err) {
 							console.log(err);
 						} else {

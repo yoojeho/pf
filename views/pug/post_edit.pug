@@ -1,0 +1,67 @@
+extends ./index
+block content 
+	.header-background
+	.con
+		label(for='text') Title:
+		div#post_num(class=post.post_number)
+		.row
+			.col.s9(style='padding-left:0;')
+				input#post_title.form-control(type='text', name='title', value=post.title)
+			.col.s3(style='padding-right:0;')
+				select#post_categori.browser-default(name='categori', style='border:1px solid #d4d0d0;')
+					option(value='', disabled='', selected='') Categori
+					if post.categori === 'Java'
+						option(value='Java', selected='') Java
+					else
+						option(value='Java') Java
+					if post.categori === 'Database'
+						option(value='Database', selected='') Database
+					else
+						option(value='Database') Database
+					if post.categori === 'Node'
+						option(value='Node', selected='') Node
+					else
+						option(value='Node') Node
+		label(for='content') Content:
+		textarea#post_content(rows='3', style='resize:none; height:300px', name='content') #{post.content}
+		.click
+			.btn-group(class='click')
+				input#post_submit.btn.btn-primary.red.accent-2(type='submit', value='Submit', style="margin:1px")
+				a.btn.btn-primary.red.accent-2(href='/board/content/'+ post.post_number + '/1', role='button', style="margin:1px") Cancle
+
+	script(type='text/javascript', src='https://code.jquery.com/jquery-3.2.1.min.js')
+	script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
+
+	script.
+		$(document).ready(function() {
+			$('#post_submit').click(function() {
+				const title = $('#post_title').val();
+				const content = $('#post_content').val();
+				const categori = $('#post_categori').val();
+				const post_num = $('#post_num').attr('class');
+				console.log('hi'+post_num);
+				$.post('/board/edit/post', {
+					title,
+					content,
+					categori,
+					post_num,
+				},
+				function (data, status) {
+					if (status != "success") {
+						alert('ajax error');
+					} else {
+						if (data === "success") {
+							window.location.replace('/board/content/' + post_num + '/1');
+						} else if (data === "title_null") {
+							alert('제목을 입력해주세요');
+						} else if (data === "user_null") {
+							alert('no user');
+						} else if (data === "categori_null"){
+							alert('카테고리를 선택해주세요')
+						}	else {
+							alert('err');
+						}
+					}
+				})
+			})
+		})
