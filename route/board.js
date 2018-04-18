@@ -13,11 +13,43 @@ module.exports = () => {
 	});
 
 	// 글목록
-	route.get('/post/:post_page', (req, res) => {
+	route.get('/post', (req, res) => {
 		const { user } = req;
-		const page = req.params.post_page;
-		const sql = 'SELECT * FROM posts';
-		conn.query(sql, (err, results) => {
+		const { page } = req.query;
+		const { categori } = req.query;
+		const { title_content } = req.query;
+		const { title } = req.query;
+		const { content } = req.query;
+		let value;
+		let page_opt;
+		let whereLike;
+		let post_sql;
+
+		let sql = 'SELECT * FROM posts';
+		if (categori) {
+			sql = 'SELECT * FROM posts WHERE categori=?';
+			value = categori;
+			page_opt = '&categori=' + categori;
+		}
+
+		if (title_content) {
+			whereLike = 'title LIKE \'%' + title_content + '%\' or content LIKE \'%' + title_content + '%\'';
+		}
+		if (title) {
+			whereLike = 'title LIKE \'%' + title + '%\'';
+		}
+		if (content) {
+			whereLike = 'content LIKE \'%' + content + '%\'';
+		}
+
+		if (whereLike) {
+			post_sql = sql + ' and ' + whereLike;
+			if (!categori) post_sql = sql + ' where ' + whereLike;
+		}	else {
+			post_sql = sql;
+		}
+
+		conn.query(post_sql, value, (err, results) => {
 			const posts = results;
 			if (user) {
 				const { authId } = user;
@@ -27,16 +59,19 @@ module.exports = () => {
 					const { profilePicture } = results[0];
 					const pP = '/images/userprofile/' + email + '/profilePicture/' + profilePicture;
 					res.render('board', {
-						user: user,
-						pP: pP,
-						page: page,
-						posts: posts,
+						user,
+						pP,
+						page,
+						page_opt,
+						categori,
+						posts,
 					});
 				});
 			} else {
 				res.render('board', {
-					page: page,
-					posts: posts,
+					page,
+					page_opt,
+					posts,
 				});
 			}
 		});
@@ -50,8 +85,10 @@ module.exports = () => {
 		conn.query(sql, [post_num], (err, results) => {
 			const posts = results[0];
 			if (posts) {
+				const content = posts.content.split('');
 				const author = posts.authId;
 				const { user } = req;
+
 				const sql = 'SELECT * FROM comments WHERE post_number=?';
 				conn.query(sql, [post_num], (err, results) => {
 					const comments = results[0];
@@ -63,26 +100,28 @@ module.exports = () => {
 							const { profilePicture } = results[0];
 							const pP = '/images/userprofile/' + email + '/profilePicture/' + profilePicture;
 							res.render('content', {
-								user: user,
-								pP: pP,
-								page: page,
-								posts: posts,
-								comments: comments,
-								author: author,
-								authId: authId,
+								user,
+								pP,
+								page,
+								posts,
+								content,
+								comments,
+								author,
+								authId,
 							});
 						});
 					} else {
 						res.render('content', {
-							page: page,
-							posts: posts,
-							comments: comments,
-							author: author,
+							page,
+							posts,
+							content,
+							comments,
+							author,
 						});
 					}
 				});
 			} else {
-				res.redirect('/board/post/1');
+				res.redirect('/board/post?page=1');
 			}
 		});
 	});
@@ -93,20 +132,25 @@ module.exports = () => {
 		const { content } = req.body;
 		const { authId } = req.user;
 		const dpName = req.user.displayName;
-
+		const { categori } = req.body;
 		const doc = {
-			title: title,
-			content: content,
+			title,
+			content,
 			displayName: dpName,
-			authId: authId,
+			authId,
+			categori,
 		};
+		console.log(categori);
+		if (categori === '') return res.send('categori_null');
+		if (title === '') return res.send('title_null');
+		if (!authId) return res.send('user_null');
 		const sql = 'INSERT INTO posts SET ?';
-		conn.query(sql, doc, (err) => {
+		return conn.query(sql, doc, (err) => {
 			if (err) {
 				console.log(err);
-			} else {
-				res.redirect('/board/post/1');
+				return res.send('err');
 			}
+			return res.send('success');
 		});
 	});
 
@@ -125,30 +169,34 @@ module.exports = () => {
 				});
 			});
 		} else {
-			res.redirect('/board/post/1');
+			res.redirect('/board/post?page=1');
 		}
 	});
 
 	// 글삭제
-	route.delete('/delete/post/:post_num', (req, res) => {
-		const post_number = req.params.post_num;
-		const user_authId = req.user.authId;
-		const sql = 'SELECT * FROM posts WHERE post_number=?';
-		conn.query(sql, [post_number], (err, results) => {
-			const post_authId = results[0].authId;
-			if (post_authId === user_authId) {
-				const sql = 'DELETE FROM posts WHERE post_number=? AND authId=?';
-				conn.query(sql, [post_number, user_authId], (err) => {
-					if (err) {
-						console.log(err);
-					} else {
-						res.redirect('/board/post/1');
-					}
-				});
-			} else {
-				res.send('fail');
-			}
-		});
+	route.get('/delete/post/:post_num', (req, res) => {
+		if (req.user) {
+			const post_number = req.params.post_num;
+			const user_authId = req.user.authId;
+			const sql = 'SELECT * FROM posts WHERE post_number=?';
+			conn.query(sql, [post_number], (err, results) => {
+				const post_authId = results[0].authId;
+				if (post_authId === user_authId) {
+					const sql = 'DELETE FROM posts WHERE post_number=? AND authId=?';
+					conn.query(sql, [post_number, user_authId], (err) => {
+						if (err) {
+							console.log(err);
+						} else {
+							res.redirect('/board/post?page=1');
+						}
+					});
+				} else {
+					res.send('fail');
+				}
+			});
+		} else {
+			res.redirect('/board/post?page=1');
+		}
 	});
 
 	// route.get('/delete/comment/:post_num/:comment_num', (req, res) => {

@@ -24,7 +24,7 @@ conn.connect(() => {
 				if (err) console.log(`create temp table erroror => ${err}`);
 			});
 
-			const posts_sql = 'CREATE TABLE IF NOT EXISTS posts (post_number INT PRIMARY KEY AUTO_INCREMENT, title VARCHAR(30) not null, content VARCHAR(255), displayName VARCHAR(15) not null, authId VARCHAR(40) not null)';
+			const posts_sql = 'CREATE TABLE IF NOT EXISTS posts (post_number INT PRIMARY KEY AUTO_INCREMENT, title VARCHAR(30) not null, content VARCHAR(255), displayName VARCHAR(15) not null, authId VARCHAR(40) not null, categori VARCHAR(10) not null)';
 			conn.query(posts_sql, (err) => {
 				if (err) console.log(`create posts table erroror => ${err}`);
 			});

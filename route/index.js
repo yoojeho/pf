@@ -27,7 +27,6 @@ module.exports = () => {
 		const { email } = req.body;
 		const { title } = req.body;
 		const { message } = req.body;
-		console.log(message);
 		if (email === '') return res.send('email_null');
 		if (email === 'invalid') return res.send('email_invalid');
 		if (title === '') return res.send('title_null');

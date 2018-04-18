@@ -21,3 +21,31 @@
 .page {
 	text-align: center;
 }
+
+.pagination {
+	margin: 0;
+}
+
+.pagination li a {
+	border: 1px solid rgb(180, 179, 179);
+	margin: 0 0.2rem;
+}
+.page ul.pagination li a:hover {
+	color: rgb(1, 99, 228);
+}
+
+#title {
+	color: rgb(23, 126, 126);
+}
+
+#title:hover {
+	color: #abc900;
+}
+
+#search_btn {
+	padding:0 1rem;
+}
+
+.page ul.pagination li a.selected {
+	background-color:#fcd8c8;
+}

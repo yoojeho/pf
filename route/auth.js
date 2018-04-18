@@ -7,7 +7,7 @@ const api_key = require('../config/api_key.json');
 const nodemailer = require('nodemailer');
 
 // 이메일 발송
-function sendMail(email, authToken, tempMessage) {
+const sendEmail = (email, authToken, tempMessage) => {
 	const transporter = nodemailer.createTransport({
 		host: 'smtp.gmail.com',
 		port: 587,
@@ -43,7 +43,7 @@ function sendMail(email, authToken, tempMessage) {
 			});
 		}
 	});
-}
+};
 
 // 비밀번호 체크
 function checkPassword(password) {
@@ -157,7 +157,7 @@ module.exports = (passport) => {
 			};
 			const tempLink = `localhost/auth/confirm/${mailHash}`;
 			const tempMessage = `<p>인증하시려면 다음 링크를 클릭하세요</p><p> <a href="http://${tempLink}">${tempLink}</a> </p>`;
-			sendMail(email, authToken, tempMessage);
+			sendEmail(email, authToken, tempMessage);
 			res.send('su');
 		});
 	});
@@ -211,23 +211,20 @@ module.exports = (passport) => {
 		const dpname = req.body.displayName;
 
 		if (!checkPassword(pwd)) {
-			console.log('비밀번호 오류');
 			return res.send('비밀번호 오류');
 		}
 		const sql = 'SELECT * FROM users WHERE email=?';
 		return conn.query(sql, [email], (err, results) => {
 			if (err) {
-				console.log(err);
+				return console.log(err);
 			}
 			const result = results[0];
 			if (result) {
-				console.log('존재하는유저');
 				return res.send('존재하는 유저');
 			}
 			const sql = 'SELECT authentication FROM temp WHERE email=?';
 			return conn.query(sql, [email], (err, results) => {
 				const result = results[0];
-				console.log(`result: ${result}`);
 				if (result) {
 					if (!result.authentication) {
 						return res.send('인증되지 않은 메일');
@@ -291,7 +288,7 @@ module.exports = (passport) => {
 					};
 					const tempMessage = `인증번호: ${miniHash}`;
 
-					sendMail(email, authToken, tempMessage);
+					sendEmail(email, authToken, tempMessage);
 					res.redirect(`/auth/checkuser/${tempUrl}`);
 				});
 			} else {

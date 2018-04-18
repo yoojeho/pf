@@ -52,7 +52,6 @@ io.on('connection', (socket) => {
 	// 클라이언트로부터 메세지가 수신되면
 	socket.on('send message', (name, text) => {
 		const msg = `${name} : ${text}`;
-		console.log(`msg: [ ${msg} ]`);
 		// 메세지를 전송한 클라이언트를 제외한 모든 클라이언트에 메시지 전송
 		socket.broadcast.emit('receive message', msg);
 	});

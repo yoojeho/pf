@@ -41,7 +41,7 @@ module.exports = (app) => {
 				const user = results[0];
 				if (user) {
 					const user_hash = user.hash;
-					bcrypt.compare(pwd, user_hash, (err, res) => {
+					return bcrypt.compare(pwd, user_hash, (err, res) => {
 						if (res) {
 							return done(null, user);
 						}

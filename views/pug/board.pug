@@ -2,14 +2,43 @@ extends ./index
 block content
 	.header-background
 	.type09(style='margin-top:30px;')
+		.row(style='width:70%;')
+			.col.s2(style='padding:0 .3rem;')
+				select#post_categori.browser-default(name='categori', style='border:1px solid #d4d0d0;')
+					option(value='') Categori
+					if categori === 'Java'
+						option(value='Java', selected='') Java
+					else
+						option(value='Java') Java
+					if categori === 'Database'
+						option(value='Database', selected='') Database
+					else 
+						option(value='Database') Database
+					if categori === 'Node'
+						option(value='Node', selected='') Node
+					else
+						option(value='Node') Node
+		
+			.col.s2(style='padding:0 .3rem;')
+				select#search_option.browser-default(name='searchOtn', style='border:1px solid #d4d0d0;')
+					option(value='title_content') 제목+내용
+					option(value='title') 제목
+					option(value='content') 내용
+			.input-field.col.s6(style='margin:0')
+				input#search_text(type='text', class='validate', name='searchTxt')
+			.col.s2(style='padding-left:0;')
+				a#search_btn.btn.btn-primary.btn.cyan(role='button') Search  
+	
 		table
 			colgroup
-				col(span='1', style='width: 15%;')
-				col(span='1', style='width: 70%;')
+				col(span='1', style='width: 8%;')
+				col(span='1', style='width: 10%;')
+				col(span='1', style='width: 72%;')
 				col(span='1', style='width: 15%;')
 			thead
 				tr
 					th(scope='cols') No.
+					th(scope='cols') Categori
 					th(scope='cols') Title
 					th(scope='cols') author
 			tbody
@@ -22,18 +51,28 @@ block content
 				-for(let i = start ; i > end; i--)
 					tr
 						td #{posts[i].post_number}
+						td #{posts[i].categori}
 						td 
-							a(href='/board/content/'+posts[i].post_number+'/1') #{posts[i].title}
+							a#title(href='/board/content/'+posts[i].post_number+'/1') #{posts[i].title}
 						td #{posts[i].displayName}
-		div.click
-			a#write_btn.btn.btn-primary.btn-lg.red.accent-2(style="margin:0 auto" role='button') Write   
+		.click
+			a#write_btn.btn.btn-primary.btn-lg.red.accent-2(role='button') write  
 					
 			
-		div.page
+		.page
 			ul.pagination
 				-for(let i = 0; i<pages; i++)
 					li
-						a(href='/board/post/' + (i+1))= i+1
+						if page_opt
+							if page-1 === i
+								a.selected(href='/board/post?page=' + (i+1) + page_opt)= i+1
+							else
+								a(href='/board/post?page=' + (i+1) + page_opt)= i+1
+						else 
+							if page-1 === i
+								a.selected(href='/board/post?page=' + (i+1))= i+1
+							else
+								a(href='/board/post?page=' + (i+1))= i+1
 
 	script(type='text/javascript', src='https://code.jquery.com/jquery-3.2.1.min.js')
 	script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
@@ -53,6 +92,15 @@ block content
 					}
 				})
 			})
+
+			$('#search_btn').click(function() {
+				const categori = 'categori=' + $('#post_categori').val();
+				const searchOtn = $('#search_option').val();
+				const searchTxt = searchOtn + '=' + $('#search_text').val();
+				console.log(categori);
+				window.location.replace('/board/post?page=1&' + categori + '&' + searchTxt)
+			})
 		})
+
 		
 			
