@@ -61,10 +61,8 @@ html
 
 				li
 					.row(style='text-align:center; margin:0px;')
-						.col.s6
+						.col.s12
 							a(href='/auth/register') Register
-						.col.s6
-							a(href='/auth/register') Find Password		
 	
 		nav.header.nav-top
 			.nav-wrapper
@@ -183,8 +181,10 @@ html
 				//전송 버튼 클릭시
 				$('#chat').on('submit', function(e) {
 					//서버로 메세지 전송 
+					const top = $('#chatLog')[0].scrollHeight;
 					socket.emit('send message', $('#name').val(), $('#message').val());
-					$('#chatLog').append($('#name').val() + ' : ' + $('#message').val() + "\n");	
+					$('#chatLog').append($('#name').val() + ' : ' + $('#message').val() + "\n");
+					$('#chatLog').scrollTop(top);	
 					$('#message').val("");
 					$('#message').focus();
 					e.preventDefault();
@@ -230,7 +230,9 @@ html
 				}
 
 				function socketReceiveMsg(msg) {
-						$('#chatLog').append(msg + "\n");
+					const top = $('#chatLog')[0].scrollHeight;
+					$('#chatLog').append(msg + "\n");
+					$('#chatLog').scrollTop(top);
 				}
 
 				function socketChageName(dpName) {
