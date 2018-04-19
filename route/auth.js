@@ -26,18 +26,19 @@ const sendEmail = (email, authToken, tempMessage) => {
 	};
 
 	const sql = 'INSERT INTO temp SET ?';
-	conn.query(sql, authToken, (err) => {
+	return conn.query(sql, authToken, (err) => {
 		if (err) {
 			console.log(err);
 		} else {
 			transporter.sendMail(mailOptions, (error, info) => {
 				if (error) {
-					return console.log(error);
+					console.log(error);
+					return false;
 				}
 				console.log('Message sent: %s', info.messageId);
 				// Preview only available when sending through an Ethereal account
-				return console.log('Preview URL: %s', info.response);
-
+				console.log('Preview URL: %s', info.response);
+				return true;
 				// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 				// Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 			});
@@ -48,38 +49,40 @@ const sendEmail = (email, authToken, tempMessage) => {
 // 비밀번호 체크
 function checkPassword(password) {
 	if (password.length < 8) {
-		console.log('비밀번호는 8자이상 입력해주세요');
-		return false;
+		const msg = '비밀번호는 8자이상 입력해주세요';
+		return msg;
 	}
 
 	if (!/[~!@#$%^&*()_+|<>?:{}]/.test(password)) {
-		console.log('특수문자를 사용해주세요.');
-		return false;
+		const msg = '특수문자를 사용해주세요';
+		return msg;
 	}
 	const checkNumber = password.search(/[0-9]/g);
 	const checkEnglish = password.search(/[a-z]/ig);
 
 	if (checkNumber < 0 || checkEnglish < 0) {
-		console.log('숫자와 영문자를 혼용하여야 합니다.');
-		return false;
+		const msg = '숫자와 영문자를 혼용하여야 합니다';
+		return msg;
 	}
 
 	if (/(\w)\1\1\1/.test(password)) {
-		console.log('같은 문자를 연속 4번 이상 사용하실 수 없습니다.');
-		return false;
+		const msg = '같은 문자를 연속 4번 이상 사용하실 수 없습니다';
+		return msg;
 	}
-	return true;
+	return 'success';
 }
 
 module.exports = (passport) => {
 	const storage_setting = multer.diskStorage({
 		destination(req, file, cb) {
 			const user_email = req.body.email;
+			console.log('user_email: ' + user_email);
+			console.log('name: ' + file.originalname);
 			if (!fs.existsSync(`./public/images/userprofile/${user_email}`)) {
 				fs.mkdirSync(`./public/images/userprofile/${user_email}`);
 				fs.mkdirSync(`./public/images/userprofile/${user_email}/profilePicture`);
 			}
-			cb(null, `/public/images/userprofile/${user_email}/profilePicture/`);
+			cb(null, `./public/images/userprofile/${user_email}/profilePicture/`);
 		},
 		filename(req, file, cb) {
 			cb(null, file.originalname);
@@ -147,7 +150,17 @@ module.exports = (passport) => {
 	route.post('/send', (req, res) => {
 		const { email } = req.body;
 		const timestamp = Date.now();
-		bcrypt.hash(email, saltRounds, (err, hash) => {
+		const email_check = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+
+		if (email === '') {
+			return res.send('email_null');
+		}
+
+		if (email_check.test(email) === false) {
+			return res.send('email_incorrect');
+		}
+
+		return bcrypt.hash(email, saltRounds, (err, hash) => {
 			const mailHash = hash.replace(/\//gi, '');
 
 			const authToken = {
@@ -157,8 +170,14 @@ module.exports = (passport) => {
 			};
 			const tempLink = `localhost/auth/confirm/${mailHash}`;
 			const tempMessage = `<p>인증하시려면 다음 링크를 클릭하세요</p><p> <a href="http://${tempLink}">${tempLink}</a> </p>`;
-			sendEmail(email, authToken, tempMessage);
-			res.send('su');
+			console.log('test');
+			if (sendEmail(email, authToken, tempMessage)) {
+				console.log('hi');
+				res.send('success');
+			} else {
+				console.log('fe');
+				res.send('fail');
+			}
 		});
 	});
 
@@ -199,19 +218,12 @@ module.exports = (passport) => {
 	});
 
 	// register
-	route.post('/register', upload.single('profile'), (req, res) => {
-		let filename = '';
-		if (req.file) {
-			filename = req.file.originalname;
-		}
-
+	route.post('/register_check', (req, res) => {
 		const { email } = req.body;
-		const authId = `local:${email}`;
 		const pwd = req.body.password;
-		const dpname = req.body.displayName;
 
-		if (!checkPassword(pwd)) {
-			return res.send('비밀번호 오류');
+		if (email === '') {
+			return res.send('email_null');
 		}
 		const sql = 'SELECT * FROM users WHERE email=?';
 		return conn.query(sql, [email], (err, results) => {
@@ -220,41 +232,66 @@ module.exports = (passport) => {
 			}
 			const result = results[0];
 			if (result) {
-				return res.send('존재하는 유저');
+				return res.send('exist user');
 			}
 			const sql = 'SELECT authentication FROM temp WHERE email=?';
 			return conn.query(sql, [email], (err, results) => {
-				const result = results[0];
+				const len = results.length;
+				const result = results[len - 1];
+				console.log('result: ' + result);
 				if (result) {
+					console.log('result.authentication' + result.authentication);
 					if (!result.authentication) {
-						return res.send('인증되지 않은 메일');
+						console.log('authentication');
+						return res.send('not confirmed');
 					}
-					return bcrypt.hash(pwd, saltRounds, (err, hash) => {
-						const userInfo = {
-							authId,
-							hash,
-							displayName: dpname,
-							email,
-							profilePicture: filename,
-						};
-						const sql = 'INSERT INTO users SET ?';
-						conn.query(sql, userInfo, (err) => {
-							if (err) {
-								console.log(err);
-							} else {
-								req.login(userInfo, () => {
-									req.session.save(() => {
-										res.redirect('/index');
-									});
-								});
-							}
-						});
-					});
+					if (checkPassword(pwd) !== 'success') {
+						return res.send(checkPassword(pwd));
+					}
+					return res.send('success');
 				}
-				return res.send('인증되지않은 이메일');
+				console.log('how?');
+				return res.send('not confirmed');
 			});
 		});
 	});
+
+	route.post('/register', upload.single('profile'), (req, res) => {
+		console.log('regi');
+		console.log('req.body.profile: ' + req.body.profile);
+		console.log('req.body.email: ' + req.body.email);
+		let filename = '';
+		if (req.file) {
+			filename = req.file.originalname;
+			console.log(filename);
+		}
+		const { email } = req.body;
+		const authId = `local:${email}`;
+		const pwd = req.body.password;
+		const dpname = req.body.displayName;
+		bcrypt.hash(pwd, saltRounds, (err, hash) => {
+			const userInfo = {
+				authId,
+				hash,
+				displayName: dpname,
+				email,
+				profilePicture: filename,
+			};
+			const sql = 'INSERT INTO users SET ?';
+			conn.query(sql, userInfo, (err) => {
+				if (err) {
+					console.log(err);
+				} else {
+					req.login(userInfo, () => {
+						req.session.save(() => {
+							res.redirect('/index');
+						});
+					});
+				}
+			});
+		});
+	});
+
 	route.get('/register', (req, res) => {
 		if (req.user) {
 			res.redirect('/index');

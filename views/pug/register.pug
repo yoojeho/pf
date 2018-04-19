@@ -3,24 +3,10 @@ html
 	head 
 		meta(charset='utf-8')
 		link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+		link(rel='stylesheet', href='/css/register.css')
+
 		script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
 		script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
-		style(type='text/css').
-			header {
-				text-align:center;
-				border-bottom:1px solid gray;
-				padding-bottom:50px;
-			}
-			header div {
-				position:absolute;
-				top:0;
-				right:0;
-			}
-			.layer{
-				position:absolute;
-				top:0;
-				right:50px;
-			}
 
 	body
 		header
@@ -32,12 +18,14 @@ html
 					a(href='/auth/register') REGISTER
 
 		nav
-			.container
+			.con
 				form#register.form-horizontal(action='/auth/register' method="post" enctype="multipart/form-data")
 					.form-group
 						label.control-label.col-sm-2(for='text') E-mail:
-						.col-sm-10
+						.col-sm-9
 							input#email.form-control(type='email', placeholder='Enter email', name='email')
+						.col-sm-1
+							button(id='send') send 
 					.form-group
 						label.control-label.col-sm-2(for='pwd') Password:
 						.col-sm-10
@@ -52,24 +40,72 @@ html
 							input#profile.form-control(type='file', placeholder='profile', name='profile')      
 					.form-group
 						.col-sm-offset-2.col-sm-10
-							input.btn.btn-default(type='submit' value="Submit")
+							input#register_submit.btn-default(type='submit' value="Submit")
         
-	button(id='send') send 
- 	
 	script.
 		$(document).ready(function() {
-			$("#send").click(function() {
+			// 회원가입 제출
+			let flag = true;
+			$('#register_submit').click(function(event) {
+				if (flag) {
+					event.preventDefault();
+					const email = $('#email').val();
+					const password = $('#pwd').val();
+					const displayName = $('#dpname').val();
+					let formdata = new FormData();
+					formdata.append("profile", $('input[name=profile')[0].files[0]);
+					formdata.append('email',email);
+					console.log(formdata);
+					$.post('/auth/register_check', {
+						email,
+						password,
+					},
+					function(data, status) {
+						if(status != "success") {
+							alert('ajax error');
+						} else {
+							if (data === 'not confirmed') {
+								alert('인증되지 않은 메일입니다')
+							} else if (data === 'email_null') {
+								alert('메일을 입력해주세요')
+							} else if (data === 'exist user') {
+								alert('존재하는 유저입니다')
+							} else if (data === 'success') {
+								flag = false;
+								$('#register_submit').trigger('click');
+							} else {
+								alert(data);
+							}
+						}
+					});
+				}
+				flag = true;
+			});
+
+			// 이메일 인증메일 발송
+			$("#send").click(function(event) {
+				event.preventDefault();
 				const email = $("#email").val();
 				$.post("/auth/send", {
-					email: email
+					email,
 				},
 				function(data, status) {
 					if(status != "success") {
 						alert('ajax error');
 					} else {
-						
+						if (data === 'success') {
+							alert('메일이 성공적으로 전송되었습니다')
+						} else if (data === 'email_null') {
+							alert('메일을 입력해주세요')
+						} else if (data === 'email_incorrect') {
+							alert('메일 형식이 틀렸습니다.')
+						} else {
+							alert('전송이 실패하였습니다')
+						}
 					}
 				});
 			});
 		}) 
+
+
     

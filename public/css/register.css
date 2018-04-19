@@ -1,0 +1,24 @@
+.con {
+	width: 80%;
+	height: 600px;
+	margin-left: 10%;
+	padding: 20px;
+}
+
+header {
+	text-align: center;
+	border-bottom: 1px solid gray;
+	padding-bottom: 50px;
+}
+
+header div {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.layer {
+	position: absolute;
+	top: 0;
+	right: 50px;
+}
