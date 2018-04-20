@@ -300,44 +300,6 @@ module.exports = (passport) => {
 		}
 	});
 
-	// 비밀번호 찾기
-	route.post('/findpwd', (req, res) => {
-		const { email } = req.body;
-		const timestamp = Date.now();
-		const sql = 'SELECT email FROM users WHERE email=?';
-		conn.query(sql, [email], (err, results) => {
-			if (err) {
-				console.log(err);
-			}
-			const result = results[0];
-			if (result) {
-				console.log(`results: ${JSON.stringify(results)}`);
-				console.log(`result :${result.email}`);
-				bcrypt.hash(email, saltRounds, (err, hash) => {
-					const mailHash = hash.replace(/\//gi, '');
-					const hashLen = mailHash.length;
-					const miniHash = mailHash.substring(hashLen - 16, hashLen);
-					const tempUrl = mailHash.substring(0, hashLen - 16);
-					const authToken = {
-						email,
-						mailHash,
-						time: timestamp,
-					};
-					const tempMessage = `인증번호: ${miniHash}`;
-
-					sendEmail(email, authToken, tempMessage);
-					res.redirect(`/auth/checkuser/${tempUrl}`);
-				});
-			} else {
-				res.send('존재하지않는 유저');
-			}
-		});
-	});
-
-	route.get('/findpwd', (req, res) => {
-		res.render('findpwd');
-	});
-
 	route.post('/checkuser/:tempHash', (req, res) => {
 		const CN = req.body.certificationNumber;
 		const { tempHash } = req.params;
