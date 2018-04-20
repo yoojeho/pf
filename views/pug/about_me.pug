@@ -21,10 +21,12 @@ block content
 		.parallax
 			img(src='images/background/0.jpg')
 	.section.white
-		.layout(style='margin-bottom:50px;')
+		.layout(style='margin-bottom:70px;')
 			h2 About me
-			p.grey-text.text-darken-3.lighten-3
-			|Parallax is an effect where the background content or image in this case, is moved at a different speed than the foreground content while scrolling.
+			.about_me
+				p.grey-text.text-darken-3.lighten-3
+				|저는 백엔드 개발자가 되기 위해 공부를 하고 있습니다. "천재는 노력하는 자를 이기지 못하고, 노력하는 자는 즐기는 자를 이기지 못한다"는 말이 있습니다.
+				|<br /><br />저는 새로운 기술을 배우는 것을 두려워하지 않고 즐기며 더 나은 개발자가 되기 위해서 항상 노력하여 그 가치를 인정 받고 싶습니다.
 		.layout
 			.my_info
 				.my_info_left_content
@@ -76,9 +78,9 @@ block content
 	.parallax-container
 		.parallax
 			img(src='images/background/5.jpg')
-	.section.white(style='height:500px;')
+	.section.white(style='height:550px;')
 		.layout
-			h2 Contact
+			h2(style='margin-bottom:40px;') Contact
 			.row
 				.input-field
 					i.material-icons.prefix email
@@ -117,7 +119,7 @@ block content
 			//contact message 줄수 제한
 			$('#contact_message').keydown(function() {
 				const rows = $('#contact_message').val().split('\n').length;
-				const maxRows = 11;
+				const maxRows = 4;
 				if (rows > maxRows) {
 					modifiedText = $('#contact_message').val().split("\n").slice(0, maxRows);
 					$('#contact_message').val(modifiedText.join("\n"));

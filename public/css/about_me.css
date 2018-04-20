@@ -1,3 +1,9 @@
+.about_me {
+	font-family: Nanum Brush Script;
+	padding-top: 3px;
+	font-size: 17px;
+}
+
 .info_title {
 	float: left;
 	font-weight: bold;
@@ -115,7 +121,7 @@
 }
 
 .section.white {
-	height: 720px;
+	height: 800px;
 	width: 80%;
 	margin-left: 10%;
 }
