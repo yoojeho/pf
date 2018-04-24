@@ -39,7 +39,7 @@ block content
 				const content = $('#post_content').val();
 				const categori = $('#post_categori').val();
 				const post_num = $('#post_num').attr('class');
-				console.log('hi'+post_num);
+				
 				$.post('/board/edit/post', {
 					title,
 					content,

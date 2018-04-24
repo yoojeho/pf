@@ -1,6 +1,6 @@
 extends ./index
 block googleMap
-	script(src="http://maps.googleapis.com/maps/api/js")
+	script(src="https://maps.googleapis.com/maps/api/js?key=" + JSON.parse(map_key))
 	script.
 		function initialize() {
 			const uluru = {lat: 37.6194965, lng: 127.05969579999999};

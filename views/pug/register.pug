@@ -52,10 +52,7 @@ html
 					const email = $('#email').val();
 					const password = $('#pwd').val();
 					const displayName = $('#dpname').val();
-					let formdata = new FormData();
-					formdata.append("profile", $('input[name=profile')[0].files[0]);
-					formdata.append('email',email);
-					console.log(formdata);
+					
 					$.post('/auth/register_check', {
 						email,
 						password,

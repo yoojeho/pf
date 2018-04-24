@@ -1,10 +1,11 @@
 const route = require('express').Router();
 const conn = require('../config/database')();
+const api_key = require('../config/api_key.json');
 
 module.exports = () => {
 	route.get('/', (req, res) => {
 		const { user } = req;
-
+		const map_key = JSON.stringify(api_key.google.map_key);
 		if (user) {
 			const { authId } = user;
 			const { email } = user;
@@ -15,10 +16,13 @@ module.exports = () => {
 				res.render('about_me', {
 					user: user,
 					pP: pP,
+					map_key,
 				});
 			});
 		} else {
-			res.render('about_me');
+			res.render('about_me', {
+				map_key,
+			});
 		}
 	});
 
