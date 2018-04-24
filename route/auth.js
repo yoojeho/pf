@@ -21,7 +21,7 @@ const sendEmail = (email, authToken, tempMessage) => {
 	const mailOptions = {
 		from: api_key.gmailAuth.user,
 		to: email,
-		subject: 'test',
+		subject: '이메일 인증',
 		html: tempMessage,
 	};
 
@@ -76,8 +76,6 @@ module.exports = (passport) => {
 	const storage_setting = multer.diskStorage({
 		destination(req, file, cb) {
 			const user_email = req.body.email;
-			console.log('user_email: ' + user_email);
-			console.log('name: ' + file.originalname);
 			if (!fs.existsSync(`./public/images/userprofile/${user_email}`)) {
 				fs.mkdirSync(`./public/images/userprofile/${user_email}`);
 				fs.mkdirSync(`./public/images/userprofile/${user_email}/profilePicture`);
@@ -168,14 +166,11 @@ module.exports = (passport) => {
 				mailHash,
 				time: timestamp,
 			};
-			const tempLink = `localhost/auth/confirm/${mailHash}`;
+			const tempLink = `www.dalju.site/auth/confirm/${mailHash}`;
 			const tempMessage = `<p>인증하시려면 다음 링크를 클릭하세요</p><p> <a href="http://${tempLink}">${tempLink}</a> </p>`;
-			console.log('test');
 			if (sendEmail(email, authToken, tempMessage)) {
-				console.log('hi');
 				res.send('success');
 			} else {
-				console.log('fe');
 				res.send('fail');
 			}
 		});
@@ -185,7 +180,6 @@ module.exports = (passport) => {
 	route.get('/confirm/:mailHash', (req, res) => {
 		const timestamp = Date.now() - 3600000;
 		const { mailHash } = req.params;
-		console.log(`hi${mailHash}`);
 		const sql = 'SELECT * FROM temp WHERE mailHash=? AND time>=?';
 		conn.query(sql, [mailHash, timestamp], (err, results) => {
 			const result = results[0];
@@ -238,11 +232,8 @@ module.exports = (passport) => {
 			return conn.query(sql, [email], (err, results) => {
 				const len = results.length;
 				const result = results[len - 1];
-				console.log('result: ' + result);
 				if (result) {
-					console.log('result.authentication' + result.authentication);
 					if (!result.authentication) {
-						console.log('authentication');
 						return res.send('not confirmed');
 					}
 					if (checkPassword(pwd) !== 'success') {
@@ -250,20 +241,15 @@ module.exports = (passport) => {
 					}
 					return res.send('success');
 				}
-				console.log('how?');
 				return res.send('not confirmed');
 			});
 		});
 	});
 
 	route.post('/register', upload.single('profile'), (req, res) => {
-		console.log('regi');
-		console.log('req.body.profile: ' + req.body.profile);
-		console.log('req.body.email: ' + req.body.email);
 		let filename = '';
 		if (req.file) {
 			filename = req.file.originalname;
-			console.log(filename);
 		}
 		const { email } = req.body;
 		const authId = `local:${email}`;
@@ -308,7 +294,6 @@ module.exports = (passport) => {
 		conn.query(sql, [mailHash], (err, results) => {
 			const result = results[0];
 			if (result) {
-				console.log(`checkuser result: ${result}`);
 				const len = result.mailHash.length;
 				const check = result.mailHash.substring(len - 16, len);
 
