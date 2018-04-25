@@ -65,5 +65,7 @@ typings/
 api_key.json
 db_config.json
 tsconfig.json
+set_database.js
+test.js
 
 # End of https://www.gitignore.io/api/node
