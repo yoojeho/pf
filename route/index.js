@@ -12,7 +12,12 @@ module.exports = () => {
 			const sql = 'SELECT * FROM users WHERE authId=?';
 			conn.query(sql, [authId], (err, results) => {
 				const { profilePicture } = results[0];
-				const pP = 'images/userprofile/' + email + '/profilePicture/' + profilePicture;
+				let pP;
+				if (profilePicture) {
+					pP = 'images/userprofile/' + email + '/profilePicture/' + profilePicture;
+				} else {
+					pP = 'images/userprofile/nopp/user.png';
+				}
 				res.render('about_me', {
 					user: user,
 					pP: pP,
