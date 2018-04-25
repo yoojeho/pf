@@ -7,11 +7,12 @@ block content
 			.col.s9(style='padding-left:0;')
 				input#post_title.form-control(type='text',  name='title')
 			.col.s3(style='padding-right:0;')
-				select#post_categori.browser-default(name='categori', style='border:1px solid #d4d0d0;')
-					option(value='', disabled='', selected='') Categori
+				select#post_category.browser-default(name='category', style='border:1px solid #d4d0d0;')
+					option(value='', disabled='', selected='') Category
 					option(value='Java') Java
 					option(value='Database') Database
 					option(value='Node') Node
+					option(value='etc') 기타
 		label(for='content') Content:
 		textarea#post_content(rows='3', style='resize:none; height:300px', name='content')
 		.click
@@ -27,11 +28,11 @@ block content
 			$('#post_submit').click(function() {
 				const title = $('#post_title').val();
 				const content = $('#post_content').val();
-				const categori = $('#post_categori').val();
+				const category = $('#post_category').val();
 				$.post('/board/write', {
 					title,
 					content,
-					categori,
+					category,
 				},
 				function (data, status) {
 					if (status != "success") {
@@ -43,7 +44,7 @@ block content
 							alert('제목을 입력해주세요');
 						} else if (data === "user_null") {
 							alert('no user');
-						} else if (data === "categori_null"){
+						} else if (data === "category_null"){
 							alert('카테고리를 선택해주세요')
 						}	else {
 							alert('err');

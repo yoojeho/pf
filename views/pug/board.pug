@@ -4,20 +4,25 @@ block content
 	.type09(style='margin-top:30px;')
 		.row(style='width:70%;')
 			.col.s2(style='padding:0 .3rem;')
-				select#post_categori.browser-default(name='categori', style='border:1px solid #d4d0d0;')
-					option(value='') Categori
-					if categori === 'Java'
+				select#post_category.browser-default(name='category', style='border:1px solid #d4d0d0;')
+					option(value='') Category
+					if category === 'Java'
 						option(value='Java', selected='') Java
 					else
 						option(value='Java') Java
-					if categori === 'Database'
+					if category === 'Database'
 						option(value='Database', selected='') Database
 					else 
 						option(value='Database') Database
-					if categori === 'Node'
+					if category === 'Node'
 						option(value='Node', selected='') Node
 					else
 						option(value='Node') Node
+					if category === 'etc'
+						option(value='etc', selected='') 기타
+					else 
+						option(value='etc') 기타
+
 		
 			.col.s2(style='padding:0 .3rem;')
 				select#search_option.browser-default(name='searchOtn', style='border:1px solid #d4d0d0;')
@@ -38,7 +43,7 @@ block content
 			thead
 				tr
 					th(scope='cols') No.
-					th(scope='cols') Categori
+					th(scope='cols') Category
 					th(scope='cols') Title
 					th(scope='cols') author
 			tbody
@@ -51,7 +56,10 @@ block content
 				-for(let i = start ; i > end; i--)
 					tr
 						td #{posts[i].post_number}
-						td #{posts[i].categori}
+						if posts[i].category === 'etc'
+							td 기타
+						else
+							td #{posts[i].category}
 						td 
 							a#title(href='/board/content/'+posts[i].post_number+'/1') #{posts[i].title}
 						td #{posts[i].displayName}
@@ -94,10 +102,10 @@ block content
 			})
 
 			$('#search_btn').click(function() {
-				const categori = 'categori=' + $('#post_categori').val();
+				const category = 'category=' + $('#post_category').val();
 				const searchOtn = $('#search_option').val();
 				const searchTxt = searchOtn + '=' + $('#search_text').val();
-				window.location.replace('/board/post?page=1&' + categori + '&' + searchTxt)
+				window.location.replace('/board/post?page=1&' + category + '&' + searchTxt)
 			})
 		})
 

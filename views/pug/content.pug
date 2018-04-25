@@ -6,14 +6,17 @@ block content
 			.col.s9(style='padding-left:0;')
 				|tite:
 			.col.s3(style='padding-right:0;')
-				|categori:
+				|category:
 		.row
 			.col.s9(style='padding-left:0;')
 				.collection(style='position:static;')
 					.collection-item #{post.title}
 			.col.s3(style='padding-right:0;')
 				.collection(style='position:static;')
-						.collection-item #{post.categori}
+					if post.category === 'etc'
+						.collection-item 기타
+					else
+						.collection-item #{post.category}
 		|content:
 		.collection(style='position:static;')
 			.collection-item(style='min-height:300px;') 

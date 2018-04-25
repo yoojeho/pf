@@ -16,7 +16,7 @@ module.exports = () => {
 	route.get('/post', (req, res) => {
 		const { user } = req;
 		const { page } = req.query;
-		const { categori } = req.query;
+		const { category } = req.query;
 		const { title_content } = req.query;
 		const { title } = req.query;
 		const { content } = req.query;
@@ -26,10 +26,10 @@ module.exports = () => {
 		let post_sql;
 
 		let sql = 'SELECT * FROM posts';
-		if (categori) {
-			sql = 'SELECT * FROM posts WHERE categori=?';
-			value = categori;
-			page_opt = '&categori=' + categori;
+		if (category) {
+			sql = 'SELECT * FROM posts WHERE category=?';
+			value = category;
+			page_opt = '&category=' + category;
 		}
 
 		if (title_content) {
@@ -44,7 +44,7 @@ module.exports = () => {
 
 		if (whereLike) {
 			post_sql = sql + ' and ' + whereLike;
-			if (!categori) post_sql = sql + ' where ' + whereLike;
+			if (!category) post_sql = sql + ' where ' + whereLike;
 		}	else {
 			post_sql = sql;
 		}
@@ -63,7 +63,7 @@ module.exports = () => {
 						pP,
 						page,
 						page_opt,
-						categori,
+						category,
 						posts,
 					});
 				});
@@ -132,16 +132,16 @@ module.exports = () => {
 		const { content } = req.body;
 		const { authId } = req.user;
 		const dpName = req.user.displayName;
-		const { categori } = req.body;
+		const { category } = req.body;
 		const doc = {
 			title,
 			content,
 			displayName: dpName,
 			authId,
-			categori,
+			category,
 		};
 
-		if (categori === '') return res.send('categori_null');
+		if (category === '') return res.send('category_null');
 		if (title === '') return res.send('title_null');
 		if (!authId) return res.send('user_null');
 		const sql = 'INSERT INTO posts SET ?';
@@ -179,13 +179,13 @@ module.exports = () => {
 		const { post_num } = req.body;
 		const { content } = req.body;
 		const { authId } = req.user;
-		const { categori } = req.body;
+		const { category } = req.body;
 
-		if (categori === '') return res.send('categori_null');
+		if (category === '') return res.send('category_null');
 		if (title === '') return res.send('title_null');
 		if (!authId) return res.send('user_null');
-		const sql = 'UPDATE posts set title=?, content=?, categori=? WHERE authId=? AND post_number=?';
-		return conn.query(sql, [title, content, categori, authId, post_num], (err) => {
+		const sql = 'UPDATE posts set title=?, content=?, category=? WHERE authId=? AND post_number=?';
+		return conn.query(sql, [title, content, category, authId, post_num], (err) => {
 			if (err) {
 				console.log(err);
 				return res.send('err');
