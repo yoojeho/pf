@@ -24,8 +24,8 @@ block content
 	script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
 
 	script.
-		$(document).ready(function() {
-			$('#post_submit').click(function() {
+		$(document).ready(() => {
+			$('#post_submit').click(() => {
 				const title = $('#post_title').val();
 				const content = $('#post_content').val();
 				const category = $('#post_category').val();
@@ -34,7 +34,7 @@ block content
 					content,
 					category,
 				},
-				function (data, status) {
+				(data, status) => {
 					if (status != "success") {
 						alert('ajax error');
 					} else {

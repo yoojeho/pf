@@ -107,17 +107,17 @@ block content
 	script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
  
 	script.
-		$(document).ready(function() {
+		$(document).ready(() => {
 			$('.parallax').parallax();
 			
 			//맨위로 버튼
-			$('.fixed-action-btn').click(function() {
+			$('.fixed-action-btn').click(() => {
 				$( 'html, body' ).animate( { scrollTop : 0 }, 400 );
 				return false;
 			});
 
 			//contact message 줄수 제한
-			$('#contact_message').keydown(function() {
+			$('#contact_message').keydown(() => {
 				const rows = $('#contact_message').val().split('\n').length;
 				const maxRows = 4;
 				if (rows > maxRows) {
@@ -127,7 +127,7 @@ block content
 			});
 
 			//contact 메일 보내기
-			$('#contact_submit').click(function() {
+			$('#contact_submit').click(() => {
 				const email_check = $('#contact_email').hasClass('invalid');
 				let email ='';
 				if (email_check) {
@@ -143,7 +143,7 @@ block content
 					title : title,
 					message : message
 				},
-				function (data, status) {
+				(data, status) => {
 					if (status != "success") {
 						alert('ajax error');
 					} else {

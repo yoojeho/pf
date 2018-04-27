@@ -7,28 +7,43 @@ block content
 				select#post_category.browser-default(name='category', style='border:1px solid #d4d0d0;')
 					option(value='') Category
 					if category === 'Java'
-						option(value='Java', selected='') Java
+						option(value='Java', selected) Java
 					else
-						option(value='Java') Java
+						option(value='Java') Java 
+
 					if category === 'Database'
-						option(value='Database', selected='') Database
+						option(value='Database', selected) Database
 					else 
 						option(value='Database') Database
+
 					if category === 'Node'
-						option(value='Node', selected='') Node
+						option(value='Node', selected) Node
 					else
 						option(value='Node') Node
+
 					if category === 'etc'
-						option(value='etc', selected='') 기타
+						option(value='etc', selected) 기타
 					else 
 						option(value='etc') 기타
 
 		
 			.col.s2(style='padding:0 .3rem;')
 				select#search_option.browser-default(name='searchOtn', style='border:1px solid #d4d0d0;')
-					option(value='title_content') 제목+내용
-					option(value='title') 제목
-					option(value='content') 내용
+					if searchOpt === 'title_content'
+						option(value='title_content', selected) 제목+내용
+					else 
+						option(value='title_content') 제목+내용
+
+					if searchOpt === 'title'
+						option(value='title', selected) 제목
+					else
+						option(value='title') 제목
+					
+					if searchOpt === 'content'
+						option(value='content', selected) 내용
+					else
+						option(value='content') 내용		
+			
 			.input-field.col.s6(style='margin:0')
 				input#search_text(type='text', class='validate', name='searchTxt')
 			.col.s2(style='padding-left:0;')
@@ -86,9 +101,9 @@ block content
 	script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
 
 	script.
-		$(document).ready(function() {
-			$('#write_btn').click(function() {
-				$.post('/board/usercheck', function(data, status) {
+		$(document).ready(() => {
+			$('#write_btn').click(() => {
+				$.post('/board/usercheck', (data, status) => {
 					if (status != "success") {
 						alert('ajax error');
 					} else {
@@ -101,11 +116,17 @@ block content
 				})
 			})
 
-			$('#search_btn').click(function() {
+			$('#search_btn').click(() => {
 				const category = 'category=' + $('#post_category').val();
 				const searchOtn = $('#search_option').val();
 				const searchTxt = searchOtn + '=' + $('#search_text').val();
 				window.location.replace('/board/post?page=1&' + category + '&' + searchTxt)
+			})
+
+			$('#search_text').keypress((event) => {
+				if (event.which == 13) {
+					$('#search_btn').click();
+				}
 			})
 		})
 

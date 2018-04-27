@@ -16,7 +16,7 @@ html
 				li
 					.user-view(style="margin-bottom:0px")
 						.background
-							img(src='http://photovil.hani.co.kr/files/openphoto/thumbnails/100647/035/192/preview_192036.jpg')
+							img(src='/images/background/userback.jpg')
 						a(href='#!user')
 							img.circle(src= pP)
 						a(href='#!name')
@@ -109,15 +109,15 @@ html
 		script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
 		
 		script.
-			$(document).ready(function() {
+			$(document).ready(() => {
 				//sideNav 기능
 				$('.button-collapse').sideNav({
 					menuWidth: 300, 
 					edge: 'right', 
 					closeOnClick: true, 
 					draggable: true, 
-					onOpen: function(el) { /* Do Stuff*/ }, 
-					onClose: function(el) { /* Do Stuff*/ },    
+					onOpen: (el) => { /* Do Stuff*/ }, 
+					onClose: (el) => { /* Do Stuff*/ },    
 				});
 
 				//스크롤시 header 위치
@@ -125,18 +125,18 @@ html
 				let lastScrollTop = 0; 
 				const delta = 5; 
 				const navbarHeight = $('.header').outerHeight();
-				$(window).scroll(function(event) {
+				$(window).scroll((event) => {
 					didScroll = true; 
 				});
 				
-				setInterval(function() {
+				setInterval(() => {
 					if (didScroll) { 
 						hasScrolled(); 
 						didScroll = false; 
 					} 
 				}, 250);
 
-				function hasScrolled() { 
+				const hasScrolled = () => { 
 					const st = $(this).scrollTop(); 
 					if (st == 0) {
 						$('.header').removeClass('nav-down').addClass('nav-top');
@@ -160,7 +160,7 @@ html
 				}
 
 				//header메뉴 크기 조절
-				$(window).resize(function(){
+				$(window).resize(() => {
 					const windowWidth = $(window).width();
 					if(windowWidth < 800) {
 						$('.brand-logo').addClass('hide-on-med-and-down');
@@ -179,7 +179,7 @@ html
 				});
 
 				//전송 버튼 클릭시
-				$('#chat').on('submit', function(e) {
+				$('#chat').on('submit', (e) => {
 					//서버로 메세지 전송 
 					const top = $('#chatLog')[0].scrollHeight;
 					socket.emit('send message', $('#name').val(), $('#message').val());
@@ -192,7 +192,7 @@ html
 
 				//채팅
 				let socket;
-				$('#gochat').click(function() {
+				$('#gochat').click(() => {
 					$("#chatLog").empty();
 					$("#userList").empty();
 					
@@ -208,7 +208,7 @@ html
 					socket.on('receive message', socketReceiveMsg);
 				})
 
-				$('#closemodal').click(function() {
+				$('#closemodal').click(() => {
 					socket.removeListener('login', socketLogin);
 					socket.removeListener('forceDisconnect');
 					socket.removeListener('logout', socketLogout);
@@ -219,23 +219,23 @@ html
 					socket.emit('forceDisconnect')
 				})
 
-				function socketLogin(dpName, userList) {
+				const socketLogin = (dpName, userList) => {
 					$("#chatLog").append("========== \"" + dpName + "\"" + " 님이 로그인하셨습니다. ==========\n");
 					$("#userList").text(userList);
 				}
 
-				function socketLogout(dpName, userList) {
+				const socketLogout = (dpName, userList) => {
 					$("#chatLog").append("========== \"" + dpName + "\"" + " 님이 로그아웃하셨습니다. ==========\n");
 					$("#userList").text(userList);
 				}
 
-				function socketReceiveMsg(msg) {
+				const socketReceiveMsg = (msg) => {
 					const top = $('#chatLog')[0].scrollHeight;
 					$('#chatLog').append(msg + "\n");
 					$('#chatLog').scrollTop(top);
 				}
 
-				function socketChageName(dpName) {
+				const socketChageName = (dpName) => {
 					$('#name').val(dpName);
 				}
 			});

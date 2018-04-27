@@ -43,10 +43,10 @@ html
 							input#register_submit.btn-default(type='submit' value="Submit")
         
 	script.
-		$(document).ready(function() {
+		$(document).ready(() => {
 			// 회원가입 제출
 			let flag = true;
-			$('#register_submit').click(function(event) {
+			$('#register_submit').click((event) => {
 				if (flag) {
 					event.preventDefault();
 					const email = $('#email').val();
@@ -57,7 +57,7 @@ html
 						email,
 						password,
 					},
-					function(data, status) {
+					(data, status) => {
 						if(status != "success") {
 							alert('ajax error');
 						} else {
@@ -80,13 +80,13 @@ html
 			});
 
 			// 이메일 인증메일 발송
-			$("#send").click(function(event) {
+			$("#send").click((event) => {
 				event.preventDefault();
 				const email = $("#email").val();
 				$.post("/auth/send", {
 					email,
 				},
-				function(data, status) {
+				(data, status) => {
 					if(status != "success") {
 						alert('ajax error');
 					} else {

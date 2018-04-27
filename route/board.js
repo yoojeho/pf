@@ -20,6 +20,7 @@ module.exports = () => {
 		const { title_content } = req.query;
 		const { title } = req.query;
 		const { content } = req.query;
+		let searchOpt;
 		let value;
 		let page_opt;
 		let whereLike;
@@ -34,16 +35,19 @@ module.exports = () => {
 
 		if (title_content) {
 			whereLike = 'title LIKE \'%' + title_content + '%\' or content LIKE \'%' + title_content + '%\'';
+			searchOpt = 'title_content';
 		}
 		if (title) {
 			whereLike = 'title LIKE \'%' + title + '%\'';
+			searchOpt = 'title';
 		}
 		if (content) {
 			whereLike = 'content LIKE \'%' + content + '%\'';
+			searchOpt = 'content';
 		}
 
 		if (whereLike) {
-			post_sql = sql + ' and ' + whereLike;
+			post_sql = sql + ' and (' + whereLike + ')';
 			if (!category) post_sql = sql + ' where ' + whereLike;
 		}	else {
 			post_sql = sql;
@@ -64,6 +68,7 @@ module.exports = () => {
 						page,
 						page_opt,
 						category,
+						searchOpt,
 						posts,
 					});
 				});
@@ -71,6 +76,8 @@ module.exports = () => {
 				res.render('board', {
 					page,
 					page_opt,
+					category,
+					searchOpt,
 					posts,
 				});
 			}
