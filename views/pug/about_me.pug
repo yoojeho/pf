@@ -151,7 +151,7 @@ block content
 							$('#contact_email').val('');
 							$('#contact_title').val('');
 							$('#contact_message').val('');
-							alert('success');
+							alert('메일이 전송되었습니다.');
 						} else if (data == "email_invalid") {
 							alert('메일 형식이 틀렸습니다');
 						} else if (data == "email_null") {
@@ -161,7 +161,7 @@ block content
 						} else if (data == "message_null") {
 							alert('메세지를 입력해주세요')
 						} else {
-							alert('fail');
+							alert('error');
 						}
 					}
 				})

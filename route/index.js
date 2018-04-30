@@ -1,6 +1,37 @@
 const route = require('express').Router();
 const conn = require('../config/database')();
 const api_key = require('../config/api_key.json');
+const nodemailer = require('nodemailer');
+
+// 이메일 발송
+const sendContactMail = (Message) => {
+	const transporter = nodemailer.createTransport({
+		host: 'smtp.gmail.com',
+		port: 587,
+		secure: false,
+		auth: {
+			user: api_key.gmailAuth.user,
+			pass: api_key.gmailAuth.pass,
+		},
+	});
+
+	const mailOptions = {
+		from: api_key.gmailAuth.user,
+		to: api_key.gmailAuth.naver_mail,
+		subject: '유저 문의 메일',
+		html: Message,
+	};
+
+	transporter.sendMail(mailOptions, (error) => {
+		if (error) {
+			console.log(error);
+			return false;
+		}
+		return true;
+		// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+		// Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+	});
+};
 
 module.exports = () => {
 	route.get('/', (req, res) => {
@@ -54,6 +85,9 @@ module.exports = () => {
 				console.log(err);
 				return res.send('err');
 			}
+			const sendMessage = `<p>Email : ${email} </p><p>Title : ${title}</p><p>Message : ${message}</p>`;
+
+			sendContactMail(sendMessage);
 			return res.send('success');
 		});
 	});
