@@ -32,7 +32,17 @@
 
 .my_info_ul {
 	margin: 24px 24px 24px 0;
+}
+
+.border_right {
 	border-right: 1px solid #000;
+}
+
+.border_bottom {
+	border-bottom: 1px solid #000;
+	border-top: 1px solid #000;
+	margin-bottom: 30px;
+	padding-top: 30px;
 }
 
 .article {
@@ -46,71 +56,71 @@
 	padding-bottom: 12px;
 }
 
-.my_info_left_content {
+.left_content {
 	float: left;
 	width: 50%;
 }
 
-.my_info_right_content {
+.right_content {
 	float: right;
 	width: 50%;
 }
 
-.my_info_right_content .my_skill_list {
+#my_info_right_content .my_skill_list {
 	margin: 24px 24px 24px 0;
 }
 
-.my_info_right_content .my_skill_list dt {
+#my_info_right_content .my_skill_list dt {
 	text-align: left;
 	height: 30px;
 	line-height: 30px;
 	border-bottom: 1px solid #ebe9e9;
 }
 
-.my_info_right_content .my_skill_list dt strong {
+#my_info_right_content .my_skill_list dt strong {
 	letter-spacing: 1px;
 	font-size: 12px;
 }
 
-.my_info_right_content .my_skill_list dd {
+#my_info_right_content .my_skill_list dd {
 	height: 10px;
 	margin: 10px 0;
 	background-color: rgb(212, 209, 209);
 	overflow: hidden;
 }
 
-.my_info_right_content .my_skill_list dd .guage {
+#my_info_right_content .my_skill_list dd .guage {
 	height: 10px;
 	display: block;
 	z-index: 2;
 }
 
-.my_info_right_content .my_skill_list dd .html {
+#my_info_right_content .my_skill_list dd .html {
 	width: 80%;
 	background-color: #f3c50d;
 }
 
-.my_info_right_content .my_skill_list dd .javascript {
+#my_info_right_content .my_skill_list dd .javascript {
 	width: 80%;
 	background-color: #e44c3b;
 }
 
-.my_info_right_content .my_skill_list dd .java {
+#my_info_right_content .my_skill_list dd .java {
 	width: 60%;
 	background-color: #1fee75;
 }
 
-.my_info_right_content .my_skill_list dd .db {
+#my_info_right_content .my_skill_list dd .db {
 	width: 60%;
 	background-color: #6b92db;
 }
 
-.my_info_right_content .my_skill_list dd .platform {
+#my_info_right_content .my_skill_list dd .platform {
 	width: 80%;
 	background-color: #303942;
 }
 
-.my_info_right_content .my_skill_list dd .android {
+#my_info_right_content .my_skill_list dd .android {
 	width: 50%;
 	background-color: #9955b4;
 }

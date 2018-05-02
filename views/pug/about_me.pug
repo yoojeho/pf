@@ -29,26 +29,32 @@ block content
 				|<br /><br />저는 새로운 기술을 배우는 것을 두려워하지 않고 즐기며 더 나은 개발자가 되기 위해서 항상 노력하여 그 가치를 인정 받고 싶습니다.
 		.layout
 			.my_info
-				.my_info_left_content
-					h3.my_info_title My Information Table
-					ul.my_info_ul
-						li
-							span.info_title name(이름) : 
-							span.info_content 유제호
-						li
-							span.info_title birthday(생년월일) : 
-							span.info_content 1991/12/14
-						li
-							span.info_title mobile(핸드폰) : 
-							span.info_content  010-5280-1214
-						li
-							span.info_title email(이메일) : 
-							span.info_content yjh6456@gmail.com
-						li
-							span.info_title kakaotalk(카카오톡) : 
-							span.info_content yoojeho
-				.my_info_right_content
-					h3.my_info_title Skill & Run Tool List
+				#my_info_left_content.left_content
+					.row(style='margin:0px;')
+						.blank
+						.content_layout
+							h3.my_info_title My Information Table
+							ul.my_info_ul.border_right
+								li
+									span.info_title name(이름) : 
+									span.info_content 유제호
+								li
+									span.info_title birthday(생년월일) : 
+									span.info_content 1991/12/14
+								li
+									span.info_title mobile(핸드폰) : 
+									span.info_content  010-5280-1214
+								li
+									span.info_title email(이메일) : 
+									span.info_content yjh6456@gmail.com
+								li
+									span.info_title kakaotalk(카카오톡) : 
+									span.info_content yoojeho
+						.blank
+				#my_info_right_content.right_content
+					.row.my_skill_row(style='height:40px; margin:0px;')
+						.blank
+						h3.my_info_title.content_layout Skill & Run Tool List
 					dl.my_skill_list
 						dt
 							strong HTML / CSS
@@ -75,7 +81,7 @@ block content
 						dd
 							span.guage.android(style='width:50%;')
 
-	.parallax-container
+	.parallax-container(style='width:100%;')
 		.parallax
 			img(src='images/background/5.jpg')
 	.section.white(style='height:550px;')
@@ -166,4 +172,55 @@ block content
 					}
 				})
 			})
+
+			const smallWindow = () => {
+				$('#my_info_left_content').removeClass('left_content');
+				$('#my_info_right_content').removeClass('right_content');
+				$('.my_info_ul').removeClass('border_right');
+				$('.blank').removeClass('s1');
+				$('.content_layout').removeClass('s11');
+				$('#my_info_left_content').addClass('border_bottom');
+				$('.section.white:first').css('height', '1400px');
+				$('.blank').addClass('col').addClass('s2');
+				$('.content_layout').addClass('col').addClass('s10');
+				$('.my_skill_list').css('padding-left', '5%');
+				$('.my_skill_row').css('height', '65px');
+			}
+			const largeWindow = () => {
+				$('#my_info_left_content').removeClass('border_bottom');
+				$('.blank').removeClass('col').removeClass('s2');
+				$('.content_layout').removeClass('col').removeClass('s10');
+				$('.my_info_ul').addClass('border_right');
+				$('#my_info_left_content').addClass('left_content');
+				$('#my_info_right_content').addClass('right_content');
+				$('.section.white:first').css('height', '800px');
+				$('.my_skill_list').css('padding-left', '0');
+				$('.my_skill_row').css('height', '40px');
+			}
+			const refreshWW = $(window).width();
+
+			if (refreshWW < 700) {
+				smallWindow();
+				if (refreshWW < 550) {
+					$('.blank').removeClass('col').removeClass('s2');
+					$('.content_layout').removeClass('col').removeClass('s10');
+					$('.blank').addClass('col').addClass('s1');
+					$('.content_layout').addClass('col').addClass('s11');
+				}
+			}
+
+			$(window).resize(() => {
+				const windowWidth = $(window).width();
+				if (windowWidth < 700) {
+					smallWindow();
+					if (windowWidth < 550) {
+						$('.blank').removeClass('col').removeClass('s2');
+						$('.content_layout').removeClass('col').removeClass('s10');
+						$('.blank').addClass('col').addClass('s1');
+						$('.content_layout').addClass('col').addClass('s11');
+					}
+				} else {
+					largeWindow();
+				}
+			});
 		});
