@@ -1,13 +1,13 @@
 doctype html
 html
 	head
-		title Dalju's Portfolio
+		title 유제호의 포트폴리오
 		link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
 		link(type='text/css', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css', media='screen,projection')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0')
-		meta(property='og:title' content='Portfolio')
+		meta(property='og:title' content='포트폴리오')
 		meta(property='og:url' content='https://dalju.site')
-		meta(property='og:image' content='/images/logo/img.png')
+		meta(property='og:image' content='/images/logo/og_image.png')
 		link(rel='shortcut icon', href='/images/logo/title_img.png')
 		link(rel='stylesheet', href='/css/index.css')
 		link(rel='stylesheet', href='/css/about_me.css')
@@ -114,15 +114,15 @@ html
 		script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
 		
 		script.
-			$(document).ready(() => {
+			$(document).ready(function() {
 				//sideNav 기능
 				$('.button-collapse').sideNav({
 					menuWidth: 300, 
 					edge: 'right', 
 					closeOnClick: true, 
 					draggable: true, 
-					onOpen: (el) => { /* Do Stuff*/ }, 
-					onClose: (el) => { /* Do Stuff*/ },    
+					onOpen: function (el) { /* Do Stuff*/ }, 
+					onClose: function(el) { /* Do Stuff*/ },    
 				});
 
 				//스크롤시 header 위치
@@ -130,18 +130,18 @@ html
 				let lastScrollTop = 0; 
 				const delta = 5; 
 				const navbarHeight = $('.header').outerHeight();
-				$(window).scroll((event) => {
+				$(window).scroll(function(event) {
 					didScroll = true; 
 				});
 				
-				setInterval(() => {
+				setInterval(function() {
 					if (didScroll) { 
 						hasScrolled(); 
 						didScroll = false; 
 					} 
 				}, 250);
 
-				const hasScrolled = () => { 
+				const hasScrolled = function() { 
 					const st = $(this).scrollTop(); 
 					if (st == 0) {
 						$('.header').removeClass('nav-down').addClass('nav-top');
@@ -165,7 +165,7 @@ html
 				}
 
 				//header메뉴 크기 조절
-				$(window).resize(() => {
+				$(window).resize(function() {
 					const windowWidth = $(window).width();
 					if(windowWidth < 800) {
 						$('.brand-logo').addClass('hide-on-med-and-down');
@@ -184,7 +184,7 @@ html
 				});
 
 				//전송 버튼 클릭시
-				$('#chat').on('submit', (e) => {
+				$('#chat').on('submit', function(e) {
 					//서버로 메세지 전송 
 					const top = $('#chatLog')[0].scrollHeight;
 					socket.emit('send message', $('#name').val(), $('#message').val());
@@ -197,7 +197,7 @@ html
 
 				//채팅
 				let socket;
-				$('#gochat').click(() => {
+				$('#gochat').click(function() {
 					$("#chatLog").empty();
 					$("#userList").empty();
 					
@@ -213,7 +213,7 @@ html
 					socket.on('receive message', socketReceiveMsg);
 				})
 
-				$('#closemodal').click(() => {
+				$('#closemodal').click(function() {
 					socket.removeListener('login', socketLogin);
 					socket.removeListener('forceDisconnect');
 					socket.removeListener('logout', socketLogout);
@@ -224,23 +224,23 @@ html
 					socket.emit('forceDisconnect')
 				})
 
-				const socketLogin = (dpName, userList) => {
+				const socketLogin = function(dpName, userList) {
 					$("#chatLog").append("========== \"" + dpName + "\"" + " 님이 로그인하셨습니다. ==========\n");
 					$("#userList").text(userList);
 				}
 
-				const socketLogout = (dpName, userList) => {
+				const socketLogout = function(dpName, userList) {
 					$("#chatLog").append("========== \"" + dpName + "\"" + " 님이 로그아웃하셨습니다. ==========\n");
 					$("#userList").text(userList);
 				}
 
-				const socketReceiveMsg = (msg) => {
+				const socketReceiveMsg = function(msg) {
 					const top = $('#chatLog')[0].scrollHeight;
 					$('#chatLog').append(msg + "\n");
 					$('#chatLog').scrollTop(top);
 				}
 
-				const socketChageName = (dpName) => {
+				const socketChageName = function(dpName) {
 					$('#name').val(dpName);
 				}
 			});

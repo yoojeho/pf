@@ -57,11 +57,11 @@ block content
 						h3.my_info_title.content_layout Skill & Run Tool List
 					dl.my_skill_list
 						dt
-							strong HTML / CSS
+							strong HTML / CSS / Javascript
 						dd
 							span.guage.html(style='width:70%;')
 						dt
-							strong Javascript / jQuery
+							strong Node.js
 						dd
 							span.guage.javascript(style='width:80%;')
 						dt
@@ -113,17 +113,17 @@ block content
 	script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
  
 	script.
-		$(document).ready(() => {
+		$(document).ready(function() {
 			$('.parallax').parallax();
 			
 			//맨위로 버튼
-			$('.fixed-action-btn').click(() => {
+			$('.fixed-action-btn').click(function() {
 				$( 'html, body' ).animate( { scrollTop : 0 }, 400 );
 				return false;
 			});
 
 			//contact message 줄수 제한
-			$('#contact_message').keydown(() => {
+			$('#contact_message').keydown(function() {
 				const rows = $('#contact_message').val().split('\n').length;
 				const maxRows = 4;
 				if (rows > maxRows) {
@@ -133,7 +133,7 @@ block content
 			});
 
 			//contact 메일 보내기
-			$('#contact_submit').click(() => {
+			$('#contact_submit').click(function() {
 				const email_check = $('#contact_email').hasClass('invalid');
 				let email ='';
 				if (email_check) {
@@ -149,7 +149,7 @@ block content
 					title : title,
 					message : message
 				},
-				(data, status) => {
+				function (data, status) {
 					if (status != "success") {
 						alert('ajax error');
 					} else {
@@ -173,7 +173,7 @@ block content
 				})
 			})
 
-			const smallWindow = () => {
+			const smallWindow = function() {
 				$('#my_info_left_content').removeClass('left_content');
 				$('#my_info_right_content').removeClass('right_content');
 				$('.my_info_ul').removeClass('border_right');
@@ -186,7 +186,7 @@ block content
 				$('.my_skill_list').css('padding-left', '5%');
 				$('.my_skill_row').css('height', '65px');
 			}
-			const largeWindow = () => {
+			const largeWindow = function() {
 				$('#my_info_left_content').removeClass('border_bottom');
 				$('.blank').removeClass('col').removeClass('s2');
 				$('.content_layout').removeClass('col').removeClass('s10');
@@ -209,7 +209,7 @@ block content
 				}
 			}
 
-			$(window).resize(() => {
+			$(window).resize(function() {
 				const windowWidth = $(window).width();
 				if (windowWidth < 700) {
 					smallWindow();

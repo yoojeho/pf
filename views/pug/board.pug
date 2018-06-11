@@ -101,9 +101,9 @@ block content
 	script(type='text/javascript', src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js")
 
 	script.
-		$(document).ready(() => {
-			$('#write_btn').click(() => {
-				$.post('/board/usercheck', (data, status) => {
+		$(document).ready(function() {
+			$('#write_btn').click(function() {
+				$.post('/board/usercheck', function(data, status) {
 					if (status != "success") {
 						alert('ajax error');
 					} else {
@@ -116,14 +116,14 @@ block content
 				})
 			})
 
-			$('#search_btn').click(() => {
+			$('#search_btn').click(function() {
 				const category = 'category=' + $('#post_category').val();
 				const searchOtn = $('#search_option').val();
 				const searchTxt = searchOtn + '=' + $('#search_text').val();
 				window.location.replace('/board/post?page=1&' + category + '&' + searchTxt)
 			})
 
-			$('#search_text').keypress((event) => {
+			$('#search_text').keypress(function(event) {
 				if (event.which == 13) {
 					$('#search_btn').click();
 				}
