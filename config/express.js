@@ -14,11 +14,11 @@ schedule.scheduleJob('0 0 * * *', () => {
 	const d = new Date();
 	const sql = 'DELETE FROM temp WHERE time>=?';
 	// 매일 0시에 생성된지 하루가 지난 정보 초기화
-	conn.query(sql, [time], (err) => {
+	conn.query(sql, [time], (err, results) => {
 		if (err) {
 			return console.log(err);
 		}
-		return console.log(`delete temp, nowtime: ${nowtime} / time: ${d.getHours()}:${d.getMinutes()}/ getday(요일): ${d.getDay()} / ${d.getFullYear()}년 ${parseInt(d.getMonth() + 1, 10)}월 ${d.getDate()}일`);
+		return console.log(`delete temp, affectedRows: ${results.affectedRows} / time: ${d.getHours()}:${d.getMinutes()}/ ${d.getFullYear()}년 ${parseInt(d.getMonth() + 1, 10)}월 ${d.getDate()}일`);
 	});
 });
 app.set('view engine', 'pug');
